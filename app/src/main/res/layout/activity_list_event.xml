@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <include layout="@layout/back_bar"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:baselineAligned="false">
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:onClick="switchList"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/unsettled"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <View
+                android:id="@+id/event_type1"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/themeColor"
+                android:layout_width="46dp"
+                android:layout_height="4dp"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:onClick="switchList"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:text="@string/settled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <View
+                android:id="@+id/event_type2"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/themeColor"
+                android:layout_width="46dp"
+                android:visibility="invisible"
+                android:layout_height="4dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+<!--    <include layout="@layout/item_event"/>-->
+    <ListView
+        android:id="@+id/event_list_lv"
+        android:divider="@null"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:orientation="vertical"
+    android:background="@drawable/bolder_dark"
+    android:layout_marginTop="4dp"
+    android:layout_marginStart="6dp"
+    android:layout_marginEnd="6dp"
+    android:layout_marginBottom="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="UselessParent">
+    <include layout="@layout/common_item_title"/>
+    <TextView
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:id="@+id/info_content"
+        android:text="尊敬的客户：\n国务院2012年4月16日发布、2012年7月1日起施行的《党政机关公文处理工作条例》，对公告的使用表述为：“适用于向国内外宣布重要事项或者法定事项”。其中包含两方面的内容"
+        android:textColor="@color/darkGray"
+        android:maxLines="4"
+        android:textSize="@dimen/font_formal"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"/>
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/darkGray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <TextView
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:text="查看详情"
+            android:gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_height="30dp"
+            android:src="@drawable/common_icon_arrow_right2"
+            android:contentDescription="@string/my_picture" />
+    </LinearLayout>
+</LinearLayout>
+
+</LinearLayout>

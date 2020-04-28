@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="iv_top">6dp</dimen>
+    <dimen name="font_formal">14sp</dimen>
+    <dimen name="home_block">120dp</dimen>
+</resources>

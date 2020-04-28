@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:background="@color/colorAccent"
+    android:layout_height="60dp"
+    android:baselineAligned="false">
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/bottom_iv1"
+            android:src="@drawable/icon_mingshi_home_def"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:onClick="translation"
+            android:tag="home"
+            tools:ignore="OnClick"
+            android:contentDescription="@string/my_picture" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/bottom_iv2"
+            android:src="@drawable/icon_mingshi_od_def"
+            android:layout_marginTop="10dp"
+            android:layout_width="30dp"
+            android:onClick="translation"
+            android:contentDescription="@string/my_picture"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:tag="openDoor"
+            tools:ignore="OnClick" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:src="@drawable/icon_mingshi_per_def"
+            android:id="@+id/bottom_iv3"
+            android:onClick="translation"
+            android:tag="self"
+            tools:ignore="OnClick"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_width="30dp"
+            android:contentDescription="@string/my_picture"
+            android:layout_height="30dp"/>
+    </LinearLayout>
+
+</LinearLayout>

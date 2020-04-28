@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="116dp">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/life_info_title"
+            android:text="海鲜味道怎么选？颜色，气味味道，缺一不可"
+            android:textSize="16sp"
+            android:maxLines="2"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"/>
+        <LinearLayout
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="14sp"
+                android:textColor="@color/darkGray"
+                android:id="@+id/life_source"
+                android:layout_marginStart="1dp"
+                android:text="便民信息"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/darkGray"
+                android:id="@+id/life_timestamp"
+                android:text="2018-06-08"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:contentDescription="@string/my_picture"
+                android:src="@drawable/page_view"
+                android:layout_width="20dp"
+                android:layout_height="20dp"/>
+            <TextView
+                android:textSize="14sp"
+                android:textColor="@color/darkGray"
+                android:id="@+id/life_click_count"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="10dp"
+                android:text="1221"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <ImageView
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="10dp"
+        android:id="@+id/life_iv"
+        android:contentDescription="@string/my_picture"
+        android:src="@drawable/backbround"
+        android:scaleType="centerCrop"
+        android:layout_width="110dp"
+        android:layout_height="90dp"/>
+
+</LinearLayout>
