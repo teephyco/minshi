@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -30,6 +31,14 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
         headIv = findViewById(R.id.head);
+        SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
+        String path = sharedPreferences.getString("profilePicture","");
+        if(!path.equals("")){
+            Glide.with(getContext())
+                    .load(path)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(headIv);
+        }
         FrameLayout fl = findViewById(R.id.drag_fl);
         fl.setOnTouchListener(this);
 
@@ -42,6 +51,10 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
 
 
     public void exit(View view) {
+        SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("login",false);
+        editor.apply();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
@@ -63,7 +76,7 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1000 && resultCode == 1001 && data != null){
             String path = data.getStringExtra("path");
-            Log.i("xph","path is " + path);
+//            Log.i("xph","path is " + path);
             if(path != null)
             Glide.with(getContext())
                     .load(path)

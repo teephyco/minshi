@@ -1,63 +1,76 @@
 package com.yalianxun.mingshi;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.yalianxun.mingshi.home.HomeActivity;
 
+
 public class MainActivity extends BaseActivity {
 
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 1:
-                    Intent intent = new Intent(MainActivity.this,WelcomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                    break;
-                case 3:
-                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                    finish();
-                    break;
-            }
 
+    private Handler mHandler = new Handler(msg -> {
+        switch (msg.what){
+            case 1:
+                startActivity(new Intent(MainActivity.this,WelcomeActivity.class));
+                finish();
+                break;
+            case 2:
+                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                finish();
+                break;
+            case 3:
+                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                finish();
+                break;
         }
-    };
+        return false;
+    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //check 是否是第一次启动
-        //跳转到欢饮界面
-        //handler.sendEmptyMessageDelayed(1,3000);
-        //判断是否已经登陆
-
-        //进入主界面
-        handler.sendEmptyMessageDelayed(3,1000);
-        //动态申请权限
-        final String[] permissionsGroup=new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CALL_PHONE,
-                Manifest.permission.CAMERA};
-        requestDangerousPermissions(permissionsGroup,1000);
+        SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
+        boolean launcher = sharedPreferences.getBoolean("firstLauncher",false);
+        if (launcher){
+            //判断是否已经登陆
+            boolean login = sharedPreferences.getBoolean("login",false);
+            if(!login){
+                mHandler.sendEmptyMessageDelayed(2,1000);
+            }else {
+                //进入主界面
+                mHandler.sendEmptyMessageDelayed(3,1000);
+            }
+        }else {
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.putBoolean("firstLauncher",true);
+            editor.apply();
+            //动态申请权限
+            final String[] permissionsGroup=new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CALL_PHONE,
+                    Manifest.permission.CAMERA};
+            requestDangerousPermissions(permissionsGroup,1000);
+        mHandler.sendEmptyMessage(1);
+        }
     }
     /**
      * 请求权限
@@ -93,11 +106,14 @@ public class MainActivity extends BaseActivity {
         for (int result : grantResults) {
             if (result != PackageManager.PERMISSION_GRANTED) {
                 granted = false;
+                break;
             }
         }
         boolean finish = handlePermissionResult(requestCode, granted);
         if (!finish){
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            //跳转到欢饮界面
+            mHandler.sendEmptyMessage(1);
         }
     }
 

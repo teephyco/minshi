@@ -62,6 +62,7 @@
         <EditText
             android:id="@+id/profile_nickname"
             android:textSize="16sp"
+            android:gravity="end"
             android:hint="可输入6位昵称"
             android:layout_marginEnd="30dp"
             android:maxLength="6"

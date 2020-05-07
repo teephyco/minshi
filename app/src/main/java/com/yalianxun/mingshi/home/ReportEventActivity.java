@@ -36,7 +36,18 @@ import com.yalianxun.mingshi.utils.FullyGridLayoutManager;
 import com.yalianxun.mingshi.utils.GlideCacheEngine;
 import com.yalianxun.mingshi.utils.GlideEngine;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ReportEventActivity extends BaseActivity {
 
@@ -52,7 +63,7 @@ public class ReportEventActivity extends BaseActivity {
         setContentView(R.layout.activity_report);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.my_question);
-        initEditTextAndTextView((EditText) findViewById(R.id.et),(TextView) findViewById(R.id.change_tv),200);
+        initEditTextAndTextView(findViewById(R.id.et),findViewById(R.id.change_tv),200);
         RecyclerView mRecyclerView = findViewById(R.id.recycler);
         FullyGridLayoutManager manager = new FullyGridLayoutManager(this,
 
@@ -83,7 +94,7 @@ public class ReportEventActivity extends BaseActivity {
     }
 
     public void selectAction(View view) {
-        if(tempTv != null && tempTv != (TextView)view){
+        if(tempTv != null && tempTv != view){
             setTextViewStyle(R.drawable.bolder_unselected,"#000000");
         }
         tempTv = (TextView)view;
@@ -241,6 +252,7 @@ public class ReportEventActivity extends BaseActivity {
             return;
         }
 
+        postHttps();
         Toast.makeText(this, "提交成功" , Toast.LENGTH_SHORT).show();
     }
 
@@ -248,5 +260,43 @@ public class ReportEventActivity extends BaseActivity {
         //go to history
         Intent intent = new Intent(this,EventListActivity.class);
         startActivity(intent);
+    }
+
+    private void postHttps(){
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("projectId", "10010345712344")
+                .add("location", "GD")
+                .add("houseNum", "1001")
+                .add("content", ((EditText) findViewById(R.id.et)).getText().toString())
+                .add("picUrl","http://pic1.win4000.com/wallpaper/2020-04-13/5e93d620d04a6.jpg")
+                .add("phone", "13923745307")
+                .add("reporterName", "xph")
+                .add("proprietorName", "xy")
+                .build();
+        Request request = new Request.Builder()
+                .url("http://192.168.1.108:8088/api/finger/event/createEventReport")
+                .post(requestBody)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.d("okhttp", "onFailure: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+
+                if(response.body() != null)
+                    Log.d("okhttp", "onResponse: " + response.body().toString());
+                    //加载真实的数据
+
+            }
+        });
+    }
+
+    private void uploadPicture(){
+
     }
 }

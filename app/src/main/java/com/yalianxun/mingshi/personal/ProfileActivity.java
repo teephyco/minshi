@@ -3,9 +3,11 @@ package com.yalianxun.mingshi.personal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +30,8 @@ public class ProfileActivity extends BaseActivity {
 
     private CircleImageView headIv;
     private String picturePath;
+    private EditText et;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,19 @@ public class ProfileActivity extends BaseActivity {
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.my_profile);
         headIv = findViewById(R.id.profile_head);
+        et = findViewById(R.id.profile_nickname);
+        sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
+        String nickName = sharedPreferences.getString("nickName","");
+        if(!nickName.equals("")){
+            et.setText(nickName);
+        }
+        String path = sharedPreferences.getString("profilePicture","");
+        if(!path.equals("")){
+            Glide.with(getContext())
+                    .load(path)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(headIv);
+        }
     }
 
     public void goBack(View view) {
@@ -95,6 +112,10 @@ public class ProfileActivity extends BaseActivity {
 
         intent.putExtra("path",picturePath);
         Log.i("xph"," picturePath is " + picturePath);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("nickName",et.getText().toString());
+        editor.putString("profilePicture",picturePath);
+        editor.apply();
         setResult(1001,intent);
         finish();
     }

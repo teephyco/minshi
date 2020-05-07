@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'com.mob.sdk'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -30,6 +32,17 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'https://jitpack.io' }
+    }
+}
+
+// 在MobSDK的扩展中注册SMS SDK的相关信息
+MobSDK {
+//    domain 'jp'
+    appKey '2f010dea45e00'
+    appSecret '21ee4894447e48e73ef0d3e5f4da4c29'
+
+    SMSSDK {
+        //gui false
     }
 }
 

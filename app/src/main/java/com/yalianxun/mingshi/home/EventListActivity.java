@@ -3,6 +3,7 @@ package com.yalianxun.mingshi.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -11,9 +12,19 @@ import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.EventAdapter;
 import com.yalianxun.mingshi.beans.Event;
+import com.yalianxun.mingshi.utils.DateUtil;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class EventListActivity extends BaseActivity {
     List<Event> unsettledData = new ArrayList<>();
@@ -66,6 +77,7 @@ public class EventListActivity extends BaseActivity {
                     "2019-06-12 16:48:25","2019-07-12 15:48:25");
             settledData.add(event);
         }
+        getHttps();
 
 
     }
@@ -97,5 +109,51 @@ public class EventListActivity extends BaseActivity {
                 startActivity(intent);
             });
         }
+    }
+
+    private void getHttps(){
+        OkHttpClient okHttpClient=new OkHttpClient();
+        final Request request=new Request.Builder()
+                .url("http://192.168.1.108:8088/api/finger/event/getEventReportList?projectId=10010345712344&houseNum=1001&phone=13923745307")
+                .get()
+                .build();
+        final Call call = okHttpClient.newCall(request);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = call.execute();
+                    if(response.body() != null){
+                        //Log.d("okhttp","xph??"+response.body().string());
+                        try {
+                            String str = response.body().string();
+                            JSONObject jsonObjectALL = new JSONObject(str);
+                            JSONArray jsonArray = jsonObjectALL.getJSONArray("dataList");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                // JSON数组里面的具体-JSON对象
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String content = jsonObject.optString("content", "");
+                                long reportTime = jsonObject.optLong("reportTime", 0);
+                                String picUrl = jsonObject.optString("picUrl", "");
+
+                                // 日志打印结果：
+                                String timestamp = DateUtil.getTime(reportTime,1);
+                                Log.d("okhttp", "解析的结果：content" + content + " reportTime: " + timestamp + " picUrl:" + picUrl);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                } catch (IOException e) {
+                    Log.d("okhttp","Fail reason : "+ e.getMessage());
+
+                    e.printStackTrace();
+
+                }
+            }
+        }).start();
     }
 }
