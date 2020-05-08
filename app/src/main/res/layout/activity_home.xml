@@ -62,7 +62,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_gravity="bottom"
                     android:textSize="18sp"
-                    android:text="港湾海岸13栋1003"
+                    android:text="@string/home_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <ImageView
@@ -77,15 +77,15 @@
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
-    <TextView
+    <com.yalianxun.mingshi.view.AutoScrollTextView
+        android:id="@+id/first_notify"
         android:layout_marginTop="3dp"
+        android:paddingTop="16dp"
         android:background="#ff9966"
-        android:textColor="@color/app_color_f6"
-        android:gravity="center"
         android:textStyle="bold"
         android:maxLength="20"
         android:textSize="16sp"
-        android:text="物业管理费已经出来了，可以进行缴费了"
+        android:text="@string/first_notification"
         android:layout_width="match_parent"
         android:layout_height="60dp"/>
     <LinearLayout
@@ -102,7 +102,7 @@
             android:background="@color/themeColor"
             android:layout_height="match_parent">
         <TextView
-            android:text="门禁"
+            android:text="@string/access_card"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="6dp"
             android:textSize="16sp"
@@ -137,7 +137,8 @@
         android:layout_marginTop="3dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/home_block">
+        android:layout_height="@dimen/home_block"
+        android:baselineAligned="false">
         <LinearLayout
             android:onClick="goToNext"
             android:tag="notify"

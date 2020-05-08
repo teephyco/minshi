@@ -29,7 +29,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ProfileActivity extends BaseActivity {
 
     private CircleImageView headIv;
-    private String picturePath;
+    private String picturePath = "";
     private EditText et;
     private SharedPreferences sharedPreferences;
     @Override
@@ -114,7 +114,9 @@ public class ProfileActivity extends BaseActivity {
         Log.i("xph"," picturePath is " + picturePath);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("nickName",et.getText().toString());
-        editor.putString("profilePicture",picturePath);
+        if(!picturePath.equals("")){
+            editor.putString("profilePicture",picturePath);
+        }
         editor.apply();
         setResult(1001,intent);
         finish();

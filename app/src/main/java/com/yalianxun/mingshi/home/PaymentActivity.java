@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +15,7 @@ import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.PayAdapter;
 import com.yalianxun.mingshi.beans.PayRecord;
+import com.yalianxun.mingshi.view.LoadMoreListView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +34,12 @@ import okhttp3.Response;
 public class PaymentActivity extends BaseActivity {
 
     private List<PayRecord> listData = new ArrayList<>();
-    private ListView listView;
+    private LoadMoreListView listView;
+    private PayAdapter adapter;
+    private LinearLayout pay_l;
+    private LinearLayout progress_l;
+    private ProgressBar progressBar;
+    private TextView loadTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,24 +52,20 @@ public class PaymentActivity extends BaseActivity {
 
     }
     private void initData(){
-
-//        getHttps();
+        pay_l = findViewById(R.id.pay_layout);
+        progress_l = findViewById(R.id.pay_progress_layout);
+        progressBar = findViewById(R.id.pay_progress);
+        loadTv = findViewById(R.id.pay_load_state);
         postHttps();
-//        Log.d("xph","start 111111111");
-//        for (int i=0;i<15;i++){
-//            PayRecord pr = new PayRecord("0"+(i+1),"","","","","",true);
-//            listData.add(pr);
-//        }
-//        Log.d("xph","start 333333 " + listData.size());
     }
     private void postHttps(){
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = new FormBody.Builder()
-                .add("projectId", "xiaopuhua")
+                .add("projectId", "10043123523212")
                 .add("houseNum", "1001")
                 .build();
         Request request = new Request.Builder()
-                .url("http://192.168.1.105:8088/api/finger/fee/getMonthFeeSumList")
+                .url("http://192.168.1.108:8088/api/finger/fee/getMonthFeeSumList")
                 .post(requestBody)
                 .build();
 
@@ -69,13 +73,14 @@ public class PaymentActivity extends BaseActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.d("okhttp", "onFailure: " + e.getMessage());
+                runOnUiThread(() -> showLoading());
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 if(response.body() != null)
-                    //Log.d("okhttp", "onResponse: " + response.body().string());
+                    Log.d("okhttp", "onResponse: " + response.body().toString());
                     //加载真实的数据
                     runOnUiThread(() -> loadData());
 
@@ -96,6 +101,7 @@ public class PaymentActivity extends BaseActivity {
             public void run() {
                 try {
                     Response response = call.execute();
+                    assert response.body() != null;
                     Log.d("okhttp",response.body().string()+"");
 
                 } catch (IOException e) {
@@ -140,7 +146,7 @@ public class PaymentActivity extends BaseActivity {
             PayRecord pr2 = new PayRecord("" + i,"2019","","","","1880.00",true,var,"5","2019-"+i+"-22 15:47:48");
             listData.add(pr2);
         }
-        PayAdapter adapter = new PayAdapter(listData, this);
+        adapter = new PayAdapter(listData, this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(this,DetailPayActivity.class);
@@ -148,5 +154,34 @@ public class PaymentActivity extends BaseActivity {
             intent.putExtra("pr",temp);
             startActivity(intent);
         });
+        listView.setOnLoadMoreListener(this::loadMore);
+        progress_l.setVisibility(View.GONE);
+        pay_l.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoading(){
+        loadTv.setText("加载失败");
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private void loadMore(){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                        listView.setLoadCompleted();
+                    }
+                });
+            }
+        }.start();
     }
 }

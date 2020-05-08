@@ -1,7 +1,6 @@
 package com.yalianxun.mingshi.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +59,7 @@ public class EventAdapter extends BaseAdapter {
             vh.tv5 = item.findViewById(R.id.event_finish);
             vh.tv6 = item.findViewById(R.id.end_timestamp);
             vh.tv7 = item.findViewById(R.id.event_status);
+            vh.tv8 = item.findViewById(R.id.event_delete);
             //找到布局框
             vh.ll = item.findViewById(R.id.event_show_pic);
             vh.ll2 = item.findViewById(R.id.event_feedback);
@@ -88,6 +88,11 @@ public class EventAdapter extends BaseAdapter {
                 vh.tv7.setText("未处理");
                 vh.ll3.setVisibility(View.GONE);
                 vh.ll2.setVisibility(View.VISIBLE);
+                vh.tv8.setOnClickListener(v -> {
+                    listViewData.remove(position);
+                    //此时需要后台同步删除
+                    notifyDataSetChanged();
+                });
             }else if(pr.getStatus() == 1){
                 vh.tv7.setText("处理中");
                 vh.ll3.setVisibility(View.GONE);
@@ -145,6 +150,7 @@ public class EventAdapter extends BaseAdapter {
         TextView tv5;
         TextView tv6;
         TextView tv7;
+        TextView tv8;
         LinearLayout ll;
         LinearLayout ll2;
         LinearLayout ll3;

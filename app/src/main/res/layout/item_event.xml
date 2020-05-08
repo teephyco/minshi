@@ -137,6 +137,7 @@
                 android:layout_height="match_parent"
                 tools:ignore="NestedWeights" />
         <TextView
+                android:id="@+id/event_delete"
                 android:layout_marginEnd="20dp"
                 android:text="撤销"
                 android:layout_gravity="center"

@@ -153,18 +153,15 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ed_bottom"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:visibility="gone"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="30dp">
-        <View
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"/>
         <TextView
             android:background="@drawable/bolder_blue_tv"
+            android:visibility="gone"
             android:text="撤销"
             android:textSize="16sp"
             android:textColor="@color/app_color_f6"
@@ -172,20 +169,5 @@
             android:layout_gravity="center"
             android:layout_width="84dp"
             android:layout_height="24dp"/>
-        <TextView
-            android:layout_marginStart="24dp"
-            android:background="@drawable/bolder_blue_tv"
-            android:text="催办"
-            android:textSize="16sp"
-            android:textColor="@color/app_color_f6"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_width="84dp"
-            android:layout_height="24dp"/>
-
-        <View
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"/>
     </LinearLayout>
 </LinearLayout>

@@ -14,23 +14,26 @@ import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.open.OpenDoorActivity;
 import com.yalianxun.mingshi.personal.PersonalActivity;
+import com.yalianxun.mingshi.view.AutoScrollTextView;
 
 public class HomeActivity extends BaseActivity {
     final String[] locations = new String[]{"南晶小区12栋302", "南晶小区6栋702",
             "南雅豪庭32栋1704", "南雅豪庭32栋1301",
             "南雅豪庭11栋1203", "南雅豪庭10栋1102",};//数据来源后台
     private String CUSTOMER_SERVICE_PHONE = "075528716473";
+    private AutoScrollTextView autoScrollTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Log.i("xph","onCreate " + this);
+        autoScrollTextView = findViewById(R.id.first_notify);
+        autoScrollTextView.init(getWindowManager());
+        autoScrollTextView.startScroll();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.i("xph","onNewIntent " + this);
     }
 
     public void translation(View view) {

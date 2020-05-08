@@ -72,5 +72,9 @@
     <string name="unsettled">未处理</string>
     <string name="settled">已完成</string>
     <string name="my_notify">通知告知</string>
+    <string name="first_notification">物业管理费已经出来了，可以进行缴费了</string>
+    <string name="access_card">门禁</string>
+    <string name="home_location">港湾海岸13栋1003</string>
+    <string name="loading">加载中…</string>
 
 </resources>
