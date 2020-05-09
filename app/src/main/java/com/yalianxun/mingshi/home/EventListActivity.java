@@ -41,8 +41,8 @@ public class EventListActivity extends BaseActivity {
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.event_list);
         listView = findViewById(R.id.event_list_lv);
-        String brand = android.os.Build.BRAND;
-        Log.d("xph","brand " + brand + " type " + Build.MODEL);
+//        String brand = android.os.Build.BRAND;
+//        Log.d("xph","brand " + brand + " type " + Build.MODEL);
         initData();
         showListContent(findViewById(R.id.event_type2), findViewById(R.id.event_type1),unsettledData);
     }
