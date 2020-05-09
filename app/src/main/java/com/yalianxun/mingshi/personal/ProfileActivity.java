@@ -69,7 +69,7 @@ public class ProfileActivity extends BaseActivity {
                 .isReturnEmpty(false)// 未选择数据时点击按钮是否可以返回
                 .selectionMode(PictureConfig.SINGLE)
                 .isCamera(true)// 是否显示拍照按钮
-                .compress(true)// 是否压缩
+                .compress(false)// 是否压缩
                 .enableCrop(true)
                 .cutOutQuality(90)// 裁剪输出质量 默认100
                 .minimumCompressSize(100)
@@ -82,12 +82,11 @@ public class ProfileActivity extends BaseActivity {
                         for (LocalMedia media : result) {
 
 
-                            String path = media.getCompressPath();
+                            String path = media.getCutPath();
                             Glide.with(getContext())
                                     .load(path)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(headIv);
-//                            Log.i(TAG, "xph path : " + path);
                             picturePath = path;
 
                         }

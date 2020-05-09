@@ -15,6 +15,7 @@ import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.PayAdapter;
 import com.yalianxun.mingshi.beans.PayRecord;
+import com.yalianxun.mingshi.utils.HttpUtils;
 import com.yalianxun.mingshi.view.LoadMoreListView;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,7 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -64,8 +66,9 @@ public class PaymentActivity extends BaseActivity {
                 .add("projectId", "10043123523212")
                 .add("houseNum", "1001")
                 .build();
+        String url = HttpUtils.URL + "finger/fee/getMonthFeeSumList";
         Request request = new Request.Builder()
-                .url("http://192.168.1.108:8088/api/finger/fee/getMonthFeeSumList")
+                .url(url)
                 .post(requestBody)
                 .build();
 

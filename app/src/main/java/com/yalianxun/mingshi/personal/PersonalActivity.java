@@ -76,7 +76,6 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1000 && resultCode == 1001 && data != null){
             String path = data.getStringExtra("path");
-//            Log.i("xph","path is " + path);
             if(path != null)
             Glide.with(getContext())
                     .load(path)
@@ -131,8 +130,6 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
                 FLING_MIN_DISTANCE && Math.abs(velocityX) >
                 FLING_MIN_VELOCITY && Math.abs((int) (e1.getY() - e2.getY())) <
                 70) {//左滑右滑皆可
-
-           // Toast.makeText(this, "drag it " + (int) (e1.getX() - e2.getX()) + " velocityX : " + velocityX, Toast.LENGTH_SHORT).show();
                 finish();
         }
 

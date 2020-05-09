@@ -1,8 +1,11 @@
 package com.yalianxun.mingshi.home;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -37,22 +40,13 @@ public class EventListActivity extends BaseActivity {
         setContentView(R.layout.activity_list_event);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.event_list);
-        initData();
-        adapter = new EventAdapter(unsettledData,this);
         listView = findViewById(R.id.event_list_lv);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            Intent intent = new Intent(this,EventDetailActivity.class);
-            Event event = unsettledData.get(position);
-            intent.putExtra("event",event);
-            startActivity(intent);
-        });
+        String brand = android.os.Build.BRAND;
+        Log.d("xph","brand " + brand + " type " + Build.MODEL);
+        initData();
+        showListContent(findViewById(R.id.event_type2), findViewById(R.id.event_type1),unsettledData);
     }
     private void initData() {
-//        for (int i=0;i<9;i++){
-//            Event notify = new Event(i+1,"",0,"","","","");
-//            listData.add(notify);
-//        }
         Event event = new Event(0,"2019-06-07 16:48:25",0,"公区报修",
                 "腾讯吐个槽进行产品评测,而腾讯吐个槽是一款专注于用户反馈的产品,前身是腾讯内部最常用的用户反馈产品",
                 "","");
@@ -87,34 +81,16 @@ public class EventListActivity extends BaseActivity {
 
     public void switchList(View view) {
         if(view.findViewById(R.id.event_type1) != null){
-            findViewById(R.id.event_type2).setVisibility(View.INVISIBLE);
-            findViewById(R.id.event_type1).setVisibility(View.VISIBLE);
-            adapter = new EventAdapter(unsettledData,this);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener((parent, v, position, id) -> {
-                Intent intent = new Intent(this,EventDetailActivity.class);
-                Event event = unsettledData.get(position);
-                intent.putExtra("event",event);
-                startActivity(intent);
-            });
+            showListContent(findViewById(R.id.event_type2), findViewById(R.id.event_type1),unsettledData);
         }else {
-            findViewById(R.id.event_type2).setVisibility(View.VISIBLE);
-            findViewById(R.id.event_type1).setVisibility(View.INVISIBLE);
-            adapter = new EventAdapter(settledData,this);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener((parent, v, position, id) -> {
-                Intent intent = new Intent(this,EventDetailActivity.class);
-                Event event = settledData.get(position);
-                intent.putExtra("event",event);
-                startActivity(intent);
-            });
+            showListContent(findViewById(R.id.event_type1), findViewById(R.id.event_type2),settledData);
         }
     }
 
     private void getHttps(){
         OkHttpClient okHttpClient=new OkHttpClient();
         final Request request=new Request.Builder()
-                .url("http://192.168.1.108:8088/api/finger/event/getEventReportList?projectId=10010345712344&houseNum=1001&phone=13923745307")
+                .url("http://192.168.1.103:8088/api/finger/event/getEventReportList?projectId=10010345712344&houseNum=1001&phone=13923745307")
                 .get()
                 .build();
         final Call call = okHttpClient.newCall(request);
@@ -125,7 +101,6 @@ public class EventListActivity extends BaseActivity {
                 try {
                     Response response = call.execute();
                     if(response.body() != null){
-                        //Log.d("okhttp","xph??"+response.body().string());
                         try {
                             String str = response.body().string();
                             JSONObject jsonObjectALL = new JSONObject(str);
@@ -155,5 +130,18 @@ public class EventListActivity extends BaseActivity {
                 }
             }
         }).start();
+    }
+
+    private void showListContent(View v1,View v2, List<Event> list){
+        v1.setVisibility(View.INVISIBLE);
+        v2.setVisibility(View.VISIBLE);
+        adapter = new EventAdapter(list,this);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener((parent, v, position, id) -> {
+            Intent intent = new Intent(this,EventDetailActivity.class);
+            Event event = list.get(position);
+            intent.putExtra("event",event);
+            startActivity(intent);
+        });
     }
 }

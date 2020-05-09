@@ -69,7 +69,6 @@ public class MainActivity extends BaseActivity {
                     Manifest.permission.CALL_PHONE,
                     Manifest.permission.CAMERA};
             requestDangerousPermissions(permissionsGroup,1000);
-        mHandler.sendEmptyMessage(1);
         }
     }
     /**
