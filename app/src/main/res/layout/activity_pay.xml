@@ -36,7 +36,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
                         android:gravity="center"
-                        android:text="未缴金额合计"
+                        android:text="@string/unpaid_total"
                         android:textColor="@color/themeColor"
                         android:textSize="18sp" />
 
@@ -45,7 +45,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="2020.20"
                         android:textColor="@color/themeColor"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -63,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
                         android:gravity="center"
-                        android:text="预存款余额"
+                        android:text="@string/accountBalance"
                         android:textColor="@color/themeColor"
                         android:textSize="18sp" />
 
@@ -72,7 +71,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="5000"
                         android:textColor="@color/themeColor"
                         android:textSize="18sp" />
                 </LinearLayout>

@@ -148,7 +148,6 @@ public class PayRecord implements Parcelable {
         this.fee = fee;
         this.payTime = payTime;
         this.payType = payType;
-//        Log.d("xph"," 111 " + payTime);
         this.unpaidCharge = allFee[0];
         this.accountBalance = allFee[1];
         this.waterCharge = allFee[2];

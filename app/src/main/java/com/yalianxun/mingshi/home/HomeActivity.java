@@ -1,7 +1,9 @@
 package com.yalianxun.mingshi.home;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,20 +14,44 @@ import android.widget.TextView;
 
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
+import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.open.OpenDoorActivity;
 import com.yalianxun.mingshi.personal.PersonalActivity;
+import com.yalianxun.mingshi.utils.JsonUtil;
 import com.yalianxun.mingshi.view.AutoScrollTextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HomeActivity extends BaseActivity {
-    final String[] locations = new String[]{"南晶小区12栋302", "南晶小区6栋702",
-            "南雅豪庭32栋1704", "南雅豪庭32栋1301",
-            "南雅豪庭11栋1203", "南雅豪庭10栋1102",};//数据来源后台
+    private List<String> locations = new ArrayList<>();
+    private List<UserInfo> list;
+    private UserInfo userInfo;
     private String CUSTOMER_SERVICE_PHONE = "075528716473";
+    private TextView userLocationTV;
     private AutoScrollTextView autoScrollTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        initView();
+    }
+
+    private void initView(){
+        SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
+        String response = sharedPreferences.getString("loginResponse","");
+        list = JsonUtil.getJsonUtil().getUserInfoList(response);
+        for(UserInfo userInfo : list){
+            String location = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum();
+            locations.add(location);
+        }
+        userLocationTV = findViewById(R.id.user_location);
+        TextView userTV = findViewById(R.id.user_name);
+        userInfo = list.get(0);
+        String name = "Hello "+ userInfo.getName();
+        userTV.setText(name);
+        String currentLocation = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum();
+        userLocationTV.setText(currentLocation);
         autoScrollTextView = findViewById(R.id.first_notify);
         autoScrollTextView.init(getWindowManager());
         autoScrollTextView.startScroll();
@@ -48,23 +74,25 @@ public class HomeActivity extends BaseActivity {
 
     public void goToNext(View view) {
         String tag = (String) view.getTag();
+        Intent intent = new Intent();
         if(tag.contains("charge")) {
-            startActivity(new Intent(this, PaymentActivity.class));
+            intent = new Intent(this, PaymentActivity.class);
         }else if(tag.contains("report")){
-            startActivity(new Intent(this, ReportEventActivity.class));
+            intent = new Intent(this, ReportEventActivity.class);
         }else if(tag.contains("call")){
-            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+CUSTOMER_SERVICE_PHONE));
+            intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+CUSTOMER_SERVICE_PHONE));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
         }else if(tag.contains("notify")){
-            startActivity(new Intent(this, PropertyNotifyActivity.class));
+            intent = new Intent(this, PropertyNotifyActivity.class);
         }else if(tag.contains("develop")){
-            startActivity(new Intent(this, PropertyDevelopActivity.class));
+            intent = new Intent(this, PropertyDevelopActivity.class);
         }else if(tag.contains("life")){
-            startActivity(new Intent(this, LifeInfoActivity.class));
+            intent = new Intent(this, LifeInfoActivity.class);
         }else if(tag.contains("document")){
-            startActivity(new Intent(this, PropertyDocumentActivity.class));
+            intent = new Intent(this, PropertyDocumentActivity.class);
         }
+        intent.putExtra("userInfo",userInfo);
+        startActivity(intent);
     }
 
 
@@ -77,7 +105,8 @@ public class HomeActivity extends BaseActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locations);
         lv.setAdapter(adapter);
         lv.setOnItemClickListener((parent, v, position, id) -> {
-            ((TextView)findViewById(R.id.user_location)).setText(locations[position]);
+            userLocationTV.setText(locations.get(position));
+            userInfo = list.get(position);
             CUSTOMER_SERVICE_PHONE = "075522671374";
             hideAlert(v);
         });

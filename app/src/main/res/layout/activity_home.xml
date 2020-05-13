@@ -29,9 +29,9 @@
                 android:layout_height="36dp"
                 tools:ignore="UselessParent">
                 <TextView
+                    android:id="@+id/user_name"
                     android:layout_marginStart="10dp"
                     android:textSize="28sp"
-                    android:text="Hello 王*"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView

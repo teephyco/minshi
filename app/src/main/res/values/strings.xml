@@ -76,5 +76,7 @@
     <string name="access_card">门禁</string>
     <string name="home_location">港湾海岸13栋1003</string>
     <string name="loading">加载中…</string>
+    <string name="unpaid_total">未缴金额合计</string>
+    <string name="accountBalance">预存款余额</string>
 
 </resources>

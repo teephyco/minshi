@@ -5,6 +5,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +22,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -35,15 +39,20 @@ import com.yalianxun.mingshi.adapter.GridImageAdapter;
 import com.yalianxun.mingshi.utils.FullyGridLayoutManager;
 import com.yalianxun.mingshi.utils.GlideCacheEngine;
 import com.yalianxun.mingshi.utils.GlideEngine;
+import com.yalianxun.mingshi.utils.HttpUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -54,6 +63,7 @@ public class ReportEventActivity extends BaseActivity {
     private GridImageAdapter mAdapter;
     private LinearLayout mLinearLayout;
     private TextView tempTv;
+    String filePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,10 +196,10 @@ public class ReportEventActivity extends BaseActivity {
 
                         public void onResult(List<LocalMedia> result) {
 
-//                            for (LocalMedia media : result) {
-//
-//
-//                            }
+                            for (LocalMedia media : result) {
+                                filePath = media.getCompressPath();
+
+                            }
 
                             mAdapter.setList(result);
 
@@ -252,7 +262,8 @@ public class ReportEventActivity extends BaseActivity {
             return;
         }
 
-        postHttps();
+//        postHttps();
+        uploadPicture();
         Toast.makeText(this, "提交成功" , Toast.LENGTH_SHORT).show();
     }
 
@@ -297,6 +308,34 @@ public class ReportEventActivity extends BaseActivity {
     }
 
     private void uploadPicture(){
+        String url = HttpUtils.URL + "common/file/uploadFileToOss";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Log.d("okhttp","path :" + filePath);
+        File file = new File(filePath);
 
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", file.getName(),RequestBody.create(MediaType.parse("application/octet-stream"), file))
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.d("okhttp", "onFailure: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                if(response.body() != null)
+                    Log.d("okhttp", "onResponse: " + response.body().string());
+                //图片上传成功
+
+            }
+        });
     }
 }

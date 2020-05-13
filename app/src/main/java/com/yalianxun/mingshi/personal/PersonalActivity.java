@@ -37,6 +37,7 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
             Glide.with(getContext())
                     .load(path)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.placeholder_pic)
                     .into(headIv);
         }
         FrameLayout fl = findViewById(R.id.drag_fl);

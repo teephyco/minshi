@@ -14,11 +14,16 @@ import android.widget.Toast;
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.PayAdapter;
+import com.yalianxun.mingshi.beans.MonthFee;
 import com.yalianxun.mingshi.beans.PayRecord;
+import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.utils.HttpUtils;
+import com.yalianxun.mingshi.utils.JsonUtil;
 import com.yalianxun.mingshi.view.LoadMoreListView;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,12 +41,16 @@ import okhttp3.Response;
 public class PaymentActivity extends BaseActivity {
 
     private List<PayRecord> listData = new ArrayList<>();
+    private List<MonthFee> list = new ArrayList<>();
     private LoadMoreListView listView;
     private PayAdapter adapter;
     private LinearLayout pay_l;
     private LinearLayout progress_l;
     private ProgressBar progressBar;
+    private UserInfo userInfo;
     private TextView loadTv;
+    private TextView unpaidChargeTV;
+    private TextView accountBalanceTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +67,18 @@ public class PaymentActivity extends BaseActivity {
         progress_l = findViewById(R.id.pay_progress_layout);
         progressBar = findViewById(R.id.pay_progress);
         loadTv = findViewById(R.id.pay_load_state);
-        postHttps();
+        unpaidChargeTV = findViewById(R.id.unpaidCharge);
+        accountBalanceTV = findViewById(R.id.accountBalance);
+        userInfo = getIntent().getParcelableExtra("userInfo");
+        postHttps("finger/fee/getBalanceAndNotPay",false);
     }
-    private void postHttps(){
+    private void postHttps(String api,boolean finish){
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = new FormBody.Builder()
-                .add("projectId", "10043123523212")
-                .add("houseNum", "1001")
+                .add("projectId", userInfo.getProjectId())
+                .add("houseNum", userInfo.getHouseNum())
                 .build();
-        String url = HttpUtils.URL + "finger/fee/getMonthFeeSumList";
+        String url = HttpUtils.URL + api;
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
@@ -76,46 +88,30 @@ public class PaymentActivity extends BaseActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.d("okhttp", "onFailure: " + e.getMessage());
-                runOnUiThread(() -> showLoading());
+                if (finish)
+                    runOnUiThread(() -> showLoading());
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
-                if(response.body() != null)
-                    Log.d("okhttp", "onResponse: " + response.body().toString());
+                if(response.body() != null){
+                    //Log.d("okhttp", "onResponse: " + response.body().string());
+                    String str = response.body().string();
                     //加载真实的数据
-                    runOnUiThread(() -> loadData());
-
+                    if (finish){
+                        runOnUiThread(() -> loadData(str));
+                    }else {
+                        if(str.contains("success")){
+                            runOnUiThread(() -> updateBalanceAndNotPay(str));
+                        }
+                    }
+                }
             }
         });
     }
 
-    private void getHttps(){
-        OkHttpClient okHttpClient=new OkHttpClient();
-        final Request request=new Request.Builder()
-                .url("http://192.168.1.103:8088/api/finger/device/listFamilyDevices?projectId=sfaas&houseNum=1001&custGlobalId=sddfssd")
-                .get()
-                .build();
-        final Call call = okHttpClient.newCall(request);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Response response = call.execute();
-                    assert response.body() != null;
-                    Log.d("okhttp",response.body().string()+"");
-
-                } catch (IOException e) {
-                    Log.d("okhttp","Fail reason : "+ e.getMessage());
-
-                    e.printStackTrace();
-
-                }
-            }
-        }).start();
-    }
 
     public void goBack(View view) {
         finish();
@@ -125,35 +121,18 @@ public class PaymentActivity extends BaseActivity {
         Toast.makeText(this, "支付功能暂不支持", Toast.LENGTH_SHORT).show();
     }
 
-    private void loadData(){
-        double[] var = new double[9];
-        var[0] = 2010.7d;//unpaidCharge
-        var[1] = 6480.1d;//accountBalance
-        var[2] = 30d;//waterCharge
-        var[3] = 108d;//electricityCharge
-        var[4] = 68d;//gasCharge
-        var[5] = 160d;//propertyCharge
-        var[6] = 300d;//parkingCharge
-        var[7] = 6.7d;//lateFeeNotPay
-        var[8] = 110d;//grossArea
-        ((TextView)findViewById(R.id.unpaidCharge)).setText(String.valueOf(var[0]));
-        ((TextView)findViewById(R.id.accountBalance)).setText(String.valueOf(var[1]));
-        PayRecord pr = new PayRecord("4","2020","","","","2010.70",false,var,"","");
-        listData.add(pr);
-        for(int i=3;i>0;i--){
-            PayRecord pr1 = new PayRecord("" + i,"2020","","","","1980.00",true,var,"5","2020-"+i+"-22 15:47:48");
-            listData.add(pr1);
+    private void loadData(String response){
+        if(response.contains("success")){
+            String currentLocation = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum();
+            String userName = userInfo.getName();
+            String mobile = userInfo.getPhone();
+            list = JsonUtil.getJsonUtil().getMonthFeeList(response,currentLocation,userName,mobile);
         }
-
-        for(int i=12;i>5;i--){
-            PayRecord pr2 = new PayRecord("" + i,"2019","","","","1880.00",true,var,"5","2019-"+i+"-22 15:47:48");
-            listData.add(pr2);
-        }
-        adapter = new PayAdapter(listData, this);
+        adapter = new PayAdapter(list, this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(this,DetailPayActivity.class);
-            PayRecord temp = listData.get(position);
+            MonthFee temp = list.get(position);
             intent.putExtra("pr",temp);
             startActivity(intent);
         });
@@ -186,5 +165,28 @@ public class PaymentActivity extends BaseActivity {
                 });
             }
         }.start();
+    }
+
+    private void updateBalanceAndNotPay(String response){
+        JSONObject jsonObjectALL = null;
+        try {
+            jsonObjectALL = new JSONObject(response);
+            JSONObject jsonData = jsonObjectALL.getJSONObject("data");
+            String str = jsonData.optString("balance", "0");
+            if(str.equals("null")){
+                accountBalanceTV.setText("0");
+            }else {
+                accountBalanceTV.setText(str);
+            }
+            str = jsonData.optString("notPayMoney", "0");
+            if(str.equals("null")){
+                unpaidChargeTV.setText("0");
+            }else {
+                unpaidChargeTV.setText(str);
+            }
+            postHttps("finger/fee/getMonthFeeSumList",true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

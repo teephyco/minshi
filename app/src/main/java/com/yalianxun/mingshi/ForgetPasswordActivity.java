@@ -16,11 +16,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.mob.MobSDK;
+import com.yalianxun.mingshi.utils.HttpUtils;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -75,39 +73,33 @@ public class ForgetPasswordActivity extends BaseActivity {
 
                 }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                     //获取验证码成功
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            nextBtn.setBackground(getDrawable(R.drawable.bolder_blue_tv));
-                            nextBtn.setTextColor(Color.parseColor("#f6f6f6"));
-                            nextBtn.setClickable(true);
-                        }
+                    runOnUiThread(() -> {
+                        nextBtn.setBackground(getDrawable(R.drawable.bolder_blue_tv));
+                        nextBtn.setTextColor(Color.parseColor("#f6f6f6"));
+                        nextBtn.setClickable(true);
                     });
 
                 }
             }else{
                 Log.i("xph"," number is" + data.getClass() + "  " + data );
                 ((Throwable)data).printStackTrace();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(data.toString().contains("校验的验证码为空")){
-                            Toast.makeText(ForgetPasswordActivity.this,"校验的验证码为空",Toast.LENGTH_SHORT).show();
-                        }
-                        if(data.toString().contains("需要校验的验证码错误")){
-                            Toast.makeText(ForgetPasswordActivity.this,"验证码错误",Toast.LENGTH_SHORT).show();
-                        }
-                        //验证失败3次，验证码失效，请重新请求
-                        if(data.toString().contains("请重新请求")){
-                            Toast.makeText(ForgetPasswordActivity.this,"验证失败3次，验证码失效，请重新请求",Toast.LENGTH_SHORT).show();
-                            String str = "获取验证码";
-                            verifyTv.setText(str);
-                            verifyTv.setTextColor(Color.parseColor("#199ED8"));
-                            verifyTv.setClickable(true);
-                        }
-                        if(data.toString().contains("当前手机号发送短信的数量超过限额")){
-                            Toast.makeText(ForgetPasswordActivity.this,"今日验证次数已达上限",Toast.LENGTH_SHORT).show();
-                        }
+                runOnUiThread(() -> {
+                    if(data.toString().contains("校验的验证码为空")){
+                        Toast.makeText(ForgetPasswordActivity.this,"校验的验证码为空",Toast.LENGTH_SHORT).show();
+                    }
+                    if(data.toString().contains("需要校验的验证码错误")){
+                        Toast.makeText(ForgetPasswordActivity.this,"验证码错误",Toast.LENGTH_SHORT).show();
+                    }
+                    //验证失败3次，验证码失效，请重新请求
+                    if(data.toString().contains("请重新请求")){
+                        Toast.makeText(ForgetPasswordActivity.this,"验证失败3次，验证码失效，请重新请求",Toast.LENGTH_SHORT).show();
+                        String str = "获取验证码";
+                        verifyTv.setText(str);
+                        verifyTv.setTextColor(Color.parseColor("#199ED8"));
+                        verifyTv.setClickable(true);
+                    }
+                    if(data.toString().contains("当前手机号发送短信的数量超过限额")){
+                        Toast.makeText(ForgetPasswordActivity.this,"今日验证次数已达上限",Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -130,7 +122,7 @@ public class ForgetPasswordActivity extends BaseActivity {
 
 
     public void next(View view) {
-        if(checkPhoneNumber()){
+        if(HttpUtils.checkPhoneNumber(phoneEt.getText().toString())){
             SMSSDK.submitVerificationCode("86", phoneEt.getText().toString(), et.getText().toString());
         }
     }
@@ -147,7 +139,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         MobSDK.submitPolicyGrantResult(true, null);
 
         SMSSDK.registerEventHandler(eh);
-        if(checkPhoneNumber()){
+        if(HttpUtils.checkPhoneNumber(phoneEt.getText().toString())){
             //Log.i("xph"," number is" + phoneEt.getText().toString() );
             SMSSDK.getVerificationCode("86", phoneEt.getText().toString());
             if (time <= 0){
@@ -187,14 +179,5 @@ public class ForgetPasswordActivity extends BaseActivity {
         Log.i("xph"," thread run end");
         SMSSDK.unregisterEventHandler(eh);
     }
-
-    //判断手机号格式是否正确
-    public boolean checkPhoneNumber(){
-        String telRegex = "[1][34578]\\d{9}";
-
-        return phoneEt.getText().toString().matches(telRegex);
-
-    }
-
 
 }

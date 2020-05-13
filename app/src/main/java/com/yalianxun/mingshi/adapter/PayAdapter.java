@@ -10,16 +10,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.yalianxun.mingshi.R;
+import com.yalianxun.mingshi.beans.MonthFee;
 import com.yalianxun.mingshi.beans.PayRecord;
 
 import java.util.List;
 
 public class PayAdapter extends BaseAdapter {
-    private List<PayRecord> listViewData;
+    private List<MonthFee> listViewData;
 
     private Context mContext;
 
-    public PayAdapter(List<PayRecord> listViewData, Context mContext) {
+    public PayAdapter(List<MonthFee> listViewData, Context mContext) {
         this.listViewData = listViewData;
         this.mContext = mContext;
     }
@@ -69,13 +70,15 @@ public class PayAdapter extends BaseAdapter {
         }
 
         //设置文本内容
-        PayRecord pr = listViewData.get(position);
-//        Log.d("xph", "payTime: " + pr.getPayTime());
+        MonthFee pr = listViewData.get(position);
         vh.tv1.setText(pr.getDateMonth());
         vh.tv2.setText(pr.getDateYear());
-        String str = "¥" + pr.getFee();
+        vh.tv3.setText(pr.getLocation());
+        String user = pr.getName() + " " + pr.getPhone();
+        vh.tv4.setText(user);
+        String str = "¥" + pr.getAmountTotal();
         vh.tv5.setText(str);
-        if (pr.isStatus()){
+        if (pr.getAmountNo().equals("0.00")){
             vh.tv1.setTextColor(Color.parseColor("#cccccc"));
             vh.tv2.setTextColor(Color.parseColor("#cccccc"));
             vh.tv3.setTextColor(Color.parseColor("#cccccc"));
@@ -92,8 +95,6 @@ public class PayAdapter extends BaseAdapter {
             vh.tv6.setText("未缴费");
             vh.tv6.setTextColor(Color.parseColor("#199ED8"));
         }
-
-
         return item;
     }
 
@@ -108,7 +109,6 @@ public class PayAdapter extends BaseAdapter {
         TextView tv4;
         TextView tv5;
         TextView tv6;
-        PayRecord pr;
     }
 
 }
