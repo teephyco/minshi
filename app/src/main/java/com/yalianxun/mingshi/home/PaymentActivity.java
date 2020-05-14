@@ -88,8 +88,7 @@ public class PaymentActivity extends BaseActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.d("okhttp", "onFailure: " + e.getMessage());
-                if (finish)
-                    runOnUiThread(() -> showLoading());
+                runOnUiThread(() -> showLoading());
             }
 
             @Override

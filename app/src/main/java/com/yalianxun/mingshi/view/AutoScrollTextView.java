@@ -128,8 +128,10 @@ public class AutoScrollTextView extends androidx.appcompat.widget.AppCompatTextV
 
         private SavedState(Parcel in) {
             super(in);
-//            boolean[] b = null;
-            throw new AssertionError();
+            boolean[] b = {true};
+            in.readBooleanArray(b);
+            isStarting = b[0];
+            step = in.readFloat();
 
         }
     }

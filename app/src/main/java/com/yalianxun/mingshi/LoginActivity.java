@@ -114,6 +114,7 @@ public class LoginActivity extends BaseActivity {
             if (list.size()>0){
                 UserInfo userInfo = list.get(0);
                 editor.putString("name",userInfo.getName());
+                editor.putString("userID",userInfo.getUserId());
             }
             editor.putString("mobile",phoneET.getText().toString());
             editor.putString("password",passwordET.getText().toString());
