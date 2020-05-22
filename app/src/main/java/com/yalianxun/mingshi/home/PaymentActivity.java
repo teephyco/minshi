@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +14,6 @@ import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.PayAdapter;
 import com.yalianxun.mingshi.beans.MonthFee;
-import com.yalianxun.mingshi.beans.PayRecord;
 import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.utils.HttpUtils;
 import com.yalianxun.mingshi.utils.JsonUtil;
@@ -32,7 +30,6 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -40,7 +37,6 @@ import okhttp3.Response;
 
 public class PaymentActivity extends BaseActivity {
 
-    private List<PayRecord> listData = new ArrayList<>();
     private List<MonthFee> list = new ArrayList<>();
     private LoadMoreListView listView;
     private PayAdapter adapter;
@@ -87,7 +83,7 @@ public class PaymentActivity extends BaseActivity {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.d("okhttp", "onFailure: " + e.getMessage());
+                Log.d("ok http", "onFailure: " + e.getMessage());
                 runOnUiThread(() -> showLoading());
             }
 
@@ -95,7 +91,7 @@ public class PaymentActivity extends BaseActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 if(response.body() != null){
-                    //Log.d("okhttp", "onResponse: " + response.body().string());
+                    //Log.d("ok http", "onResponse: " + response.body().string());
                     String str = response.body().string();
                     //加载真实的数据
                     if (finish){
@@ -155,19 +151,16 @@ public class PaymentActivity extends BaseActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                        listView.setLoadCompleted();
-                    }
+                runOnUiThread(() -> {
+                    adapter.notifyDataSetChanged();
+                    listView.setLoadCompleted();
                 });
             }
         }.start();
     }
 
     private void updateBalanceAndNotPay(String response){
-        JSONObject jsonObjectALL = null;
+        JSONObject jsonObjectALL;
         try {
             jsonObjectALL = new JSONObject(response);
             JSONObject jsonData = jsonObjectALL.getJSONObject("data");

@@ -13,7 +13,6 @@
 
         <TextView
             android:id="@+id/life_info_title"
-            android:text="海鲜味道怎么选？颜色，气味味道，缺一不可"
             android:textSize="16sp"
             android:maxLines="2"
             android:layout_width="match_parent"
@@ -37,7 +36,6 @@
                 android:gravity="center"
                 android:textColor="@color/darkGray"
                 android:id="@+id/life_timestamp"
-                android:text="2018-06-08"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
 
@@ -52,7 +50,6 @@
                 android:id="@+id/life_click_count"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="10dp"
-                android:text="1221"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

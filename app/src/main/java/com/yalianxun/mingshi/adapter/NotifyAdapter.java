@@ -66,6 +66,9 @@ public class NotifyAdapter extends BaseAdapter {
 
         //设置文本内容
         Notification notification = listViewData.get(position);
+        vh.tv1.setText(notification.getTitle());
+        vh.tv2.setText(notification.getTimestamp());
+        vh.tv4.setText(notification.getContent());
         String str = "" + notification.getCountNum();
         vh.tv3.setText(str);
 

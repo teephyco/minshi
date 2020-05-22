@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.beans.Notification;
 
@@ -68,9 +70,14 @@ public class LifeInfoAdapter extends BaseAdapter {
 
         //设置文本内容
         Notification notification = listViewData.get(position);
+        vh.tv1.setText(notification.getTitle());
         String str = "" + notification.getCountNum();
         vh.tv4.setText(str);
-
+        Glide.with(mContext)
+                .load(notification.getImgUrl())
+                .placeholder(R.drawable.placeholder_pic)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(vh.iv);
         return item;
     }
 

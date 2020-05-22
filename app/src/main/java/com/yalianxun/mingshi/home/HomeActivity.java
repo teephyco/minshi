@@ -82,6 +82,8 @@ public class HomeActivity extends BaseActivity {
         }else if(tag.contains("call")){
             intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+CUSTOMER_SERVICE_PHONE));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            return;
         }else if(tag.contains("notify")){
             intent = new Intent(this, PropertyNotifyActivity.class);
         }else if(tag.contains("develop")){

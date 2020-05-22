@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">街坊邻里</string>
+    <string name="app_name">联家</string>
     <string name="my_picture">picture</string>
 
     <string name="community_profile">小区简介</string>
@@ -78,5 +78,6 @@
     <string name="loading">加载中…</string>
     <string name="unpaid_total">未缴金额合计</string>
     <string name="accountBalance">预存款余额</string>
+    <string name="check_detail">查看详情</string>
 
 </resources>

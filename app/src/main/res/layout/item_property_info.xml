@@ -19,12 +19,11 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:id="@+id/info_content"
-        android:text="尊敬的客户：\n国务院2012年4月16日发布、2012年7月1日起施行的《党政机关公文处理工作条例》，对公告的使用表述为：“适用于向国内外宣布重要事项或者法定事项”。其中包含两方面的内容"
         android:textColor="@color/darkGray"
-        android:maxLines="4"
+        android:maxLines="3"
         android:textSize="@dimen/font_formal"
         android:layout_width="match_parent"
-        android:layout_height="80dp"/>
+        android:layout_height="wrap_content"/>
     <View
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
@@ -37,11 +36,12 @@
         android:orientation="horizontal"
         android:layout_marginStart="20dp"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="45dp"
+        tools:ignore="UseCompoundDrawables">
         <TextView
             android:textSize="20sp"
             android:layout_weight="1"
-            android:text="查看详情"
+            android:text="@string/check_detail"
             android:gravity="center_vertical"
             android:layout_width="0dp"
             android:layout_height="match_parent"/>

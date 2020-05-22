@@ -28,9 +28,14 @@ public class DetailPayActivity extends BaseActivity {
         TextView tv2 = findViewById(R.id.pay_date_year);
         TextView tv3 = findViewById(R.id.pay_cost);
         TextView tv4 = findViewById(R.id.pay_status);
+        TextView myLocation = findViewById(R.id.pay_location);
+        TextView userInfo = findViewById(R.id.pay_user_info);
         if(pr != null){
             tv1.setText(pr.getDateMonth());
             tv2.setText(pr.getDateYear());
+            myLocation.setText(pr.getLocation());
+            String user = pr.getName() + " " + pr.getPhone();
+            userInfo.setText(user);
             str = "¥" + pr.getAmountTotal();
             tv3.setText(str);
             if(pr.getAmountNo().equals("0.00")){

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -14,13 +13,6 @@ import android.widget.Toast;
 
 import com.yalianxun.mingshi.utils.HttpUtils;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class SettingPasswordActivity extends BaseActivity {
 
@@ -51,27 +43,20 @@ public class SettingPasswordActivity extends BaseActivity {
             String userId = sharedPreferences.getString("userID","");
             HttpUtils.updatePassword(
                     userId,
-                    oldPassword,et.getText().toString(),
-                    new Callback() {
+                    oldPassword, et.getText().toString(),
+                    new HttpUtils.OnNetResponseListener() {
                         @Override
-                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                            Log.d("http", "onFailure: " + e.getMessage());
+                        public void onNetResponseError(String msg) {
                             runOnUiThread(()-> Toast.makeText(SettingPasswordActivity.this,"修改密码失败",Toast.LENGTH_SHORT).show());
                         }
 
                         @Override
-                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
-                            if(response.body() != null){
-                                String string = response.body().string();
-                                if(string.contains("success")){
-                                    runOnUiThread(()->{
-                                        Toast.makeText(SettingPasswordActivity.this,"修改密码成功",Toast.LENGTH_SHORT).show();
-                                        setResult(1001);
-                                        finish();
-                                    });
-                                }
-                            }
+                        public void onNetResponseSuccess(String string) {
+                            runOnUiThread(()-> {
+                                Toast.makeText(SettingPasswordActivity.this, "修改密码成功", Toast.LENGTH_SHORT).show();
+                                setResult(1001);
+                                finish();
+                            });
                         }
                     });
 
