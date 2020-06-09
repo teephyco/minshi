@@ -8,6 +8,9 @@ import android.widget.Toast;
 import com.yalianxun.mingshi.SettingPasswordActivity;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -100,7 +103,7 @@ public class HttpUtils {
     public static void uploadPicture(String filePath,OnNetResponseListener listener){
         String url = HttpUtils.URL + "common/file/uploadFileToOss";
         OkHttpClient okHttpClient = new OkHttpClient();
-        Log.d("http","path :" + filePath);
+//        Log.d("http","path :" + filePath);
         File file = new File(filePath);
 
         RequestBody requestBody = new MultipartBody.Builder()
@@ -121,13 +124,113 @@ public class HttpUtils {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
-                if(response.body() != null)
-                    Log.d("http", "onResponse: " + response.body().string());
-                //图片上传成功
+                if(response.body() != null){
+//                   Log.d("http", "onResponse: " + response.body().string());
+                    String URL = "";
+                    try {
+                        //图片上传成功
+                        JSONObject jsonObjectALL = new JSONObject(response.body().string());
+                        if(jsonObjectALL.optString("code","").equals("200"))
+                            URL = jsonObjectALL.optString("data","");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        URL = "数据异常";
+                    }
+                    listener.onNetResponseSuccess(URL);
+                }
 
             }
         });
+    }
+
+
+    public static void submitEvent(String content,OnNetResponseListener listener){
+        String url = HttpUtils.URL + "finger/event/createEventReport";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("projectId", "10010345712344")
+                .add("location", "GD")
+                .add("houseNum", "1001")
+                .add("content", content)
+                .add("picUrl","http://pic1.win4000.com/wallpaper/2020-04-13/5e93d620d04a6.jpg")
+                .add("phone", "13923745307")
+                .add("reporterName", "xph")
+                .add("proprietorName", "xy")
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.d("http", "onFailure: " + e.getMessage());
+                listener.onNetResponseError("提交失败");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+
+                if(response.body() != null){
+                    try {
+                        JSONObject jsonObjectALL = new JSONObject(response.body().string());
+                        if(jsonObjectALL.optString("code","").equals("200"))
+                            listener.onNetResponseError("报事成功");
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                        listener.onNetResponseError("网络异常");
+                    }
+                }else
+                    listener.onNetResponseError("网络异常");
+
+            }
+        });
+    }
+
+    public static void getEventReportList(String projectId, String houseNum,String phone,OnNetResponseListener listener){
+        String url = URL + "finger/event/getEventReportList?projectId=" + projectId +"&houseNum=" + houseNum + "&phone=" + phone;
+        OkHttpClient okHttpClient=new OkHttpClient();
+        final Request request=new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        final Call call = okHttpClient.newCall(request);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = call.execute();
+                    if(response.body() != null){
+                        try {
+                            String str = response.body().string();
+                            JSONObject jsonObjectALL = new JSONObject(str);
+                            JSONArray jsonArray = jsonObjectALL.getJSONArray("dataList");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                // JSON数组里面的具体-JSON对象
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String content = jsonObject.optString("content", "");
+                                long reportTime = jsonObject.optLong("reportTime", 0);
+                                String picUrl = jsonObject.optString("picUrl", "");
+
+                                // 日志打印结果：
+                                String timestamp = DateUtil.getTime(reportTime,1);
+                                Log.d("http", "解析的结果：content" + content + " reportTime: " + timestamp + " picUrl:" + picUrl);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                } catch (IOException e) {
+                    Log.d("ok http","Fail reason : "+ e.getMessage());
+                    e.printStackTrace();
+                    listener.onNetResponseError("网络异常");
+                }
+            }
+        }).start();
     }
 
     public interface OnNetResponseListener {
