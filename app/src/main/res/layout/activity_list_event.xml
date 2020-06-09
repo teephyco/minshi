@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
     <include layout="@layout/back_bar"/>
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

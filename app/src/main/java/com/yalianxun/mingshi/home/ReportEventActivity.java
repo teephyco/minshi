@@ -39,6 +39,7 @@ import com.yalianxun.mingshi.utils.HttpUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -53,8 +54,9 @@ public class ReportEventActivity extends BaseActivity {
 
     private GridImageAdapter mAdapter;
     private LinearLayout mLinearLayout;
+    private ArrayList<String> pictureURL = new ArrayList<String>();
     private TextView tempTv;
-    String filePath;
+    private String filePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,11 +129,7 @@ public class ReportEventActivity extends BaseActivity {
     private GridImageAdapter.onAddPicClickListener onAddPicClickListener = new GridImageAdapter.onAddPicClickListener() {
 
         @Override
-
         public void onAddPicClick() {
-
-            // 进入相册 以下是例子：不需要的api可以不写
-
             PictureSelector.create(ReportEventActivity.this)
 
                     .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
@@ -152,12 +150,7 @@ public class ReportEventActivity extends BaseActivity {
 
                     .isCamera(true)// 是否显示拍照按钮
 
-
                     .isZoomAnim(false)// 图片列表点击 缩放效果 默认true
-
-                    //.imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
-
-                    //.basicUCropConfig()//对外提供所有UCropOptions参数配制，但如果PictureSelector原本支持设置的还是会使用原有的设置
 
                     .compress(true)// 是否压缩
 
@@ -169,29 +162,17 @@ public class ReportEventActivity extends BaseActivity {
 
                     .minimumCompressSize(100)// 小于100kb的图片不压缩
 
-
                     .forResult(new OnResultCallbackListener<LocalMedia>() {
-
                         @Override
-
                         public void onResult(List<LocalMedia> result) {
-
-                            for (LocalMedia media : result) {
-                                filePath = media.getCompressPath();
-
-                            }
-
+//                            for (LocalMedia media : result) {
+//                                filePath = media.getCompressPath();
+//                            }
                             mAdapter.setList(result);
-
                             mAdapter.notifyDataSetChanged();
-
                         }
-
-
                         @Override
-
                         public void onCancel() {
-
                             //Log.i(TAG, "PictureSelector Cancel");
 
                         }
@@ -231,19 +212,42 @@ public class ReportEventActivity extends BaseActivity {
             Toast.makeText(this, "内容描述不能为空。" , Toast.LENGTH_SHORT).show();
             return;
         }
+        findViewById(R.id.shadow_fl).setVisibility(View.VISIBLE);
+        List<LocalMedia> list = mAdapter.getData();
+        if(list.size()>0){
+            for(int i = 0;i < list.size();i++){
+                LocalMedia media = list.get(i);
+                if(media.getCompressPath()!=null)
+                    filePath = media.getCompressPath();
+                else
+                    filePath = media.getRealPath();
+                HttpUtils.uploadPicture(filePath, new HttpUtils.OnNetResponseListener() {
+                    @Override
+                    public void onNetResponseError(String msg) {
+                        runOnUiThread(()-> {
+                            Toast.makeText(ReportEventActivity.this,msg,Toast.LENGTH_SHORT).show();
+                            findViewById(R.id.shadow_fl).setVisibility(View.GONE);
+                        });
+                    }
+                    @Override
+                    public void onNetResponseSuccess(String string) {
+                        if(string.contains("http")){
+                            pictureURL.add(string);
+                            if(pictureURL.size() == mAdapter.getData().size())
+                                runOnUiThread(()-> submitMyEvent());
+                        }else {
+                            runOnUiThread(()-> {
+                                Toast.makeText(ReportEventActivity.this,"网络异常",Toast.LENGTH_SHORT).show();
+                                findViewById(R.id.shadow_fl).setVisibility(View.GONE);
+                            });
+                        }
 
-//        postHttps();
-        HttpUtils.uploadPicture(filePath, new HttpUtils.OnNetResponseListener() {
-            @Override
-            public void onNetResponseError(String msg) {
-
+                    }
+                });
             }
-            @Override
-            public void onNetResponseSuccess(String string) {
-
-            }
-        });
-        Toast.makeText(this, "提交成功" , Toast.LENGTH_SHORT).show();
+        }else {
+            submitMyEvent();
+        }
     }
 
     public void showHistory(View view) {
@@ -252,38 +256,25 @@ public class ReportEventActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void postHttps(){
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder()
-                .add("projectId", "10010345712344")
-                .add("location", "GD")
-                .add("houseNum", "1001")
-                .add("content", ((EditText) findViewById(R.id.et)).getText().toString())
-                .add("picUrl","http://pic1.win4000.com/wallpaper/2020-04-13/5e93d620d04a6.jpg")
-                .add("phone", "13923745307")
-                .add("reporterName", "xph")
-                .add("proprietorName", "xy")
-                .build();
-        Request request = new Request.Builder()
-                .url("http://192.168.1.108:8088/api/finger/event/createEventReport")
-                .post(requestBody)
-                .build();
-
-        okHttpClient.newCall(request).enqueue(new Callback() {
+    private void submitMyEvent(){
+        HttpUtils.submitEvent(((EditText) findViewById(R.id.et)).getText().toString(), new HttpUtils.OnNetResponseListener() {
             @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.d("okhttp", "onFailure: " + e.getMessage());
+            public void onNetResponseError(String msg) {
+                runOnUiThread(()-> {
+                    Toast.makeText(ReportEventActivity.this,msg,Toast.LENGTH_SHORT).show();
+                    findViewById(R.id.shadow_fl).setVisibility(View.GONE);
+                });
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-
-                if(response.body() != null)
-                    Log.d("okhttp", "onResponse: " + response.body().toString());
-                    //加载真实的数据
-
+            public void onNetResponseSuccess(String string) {
+                runOnUiThread(()-> {
+                    Toast.makeText(ReportEventActivity.this,string,Toast.LENGTH_SHORT).show();
+                    findViewById(R.id.shadow_fl).setVisibility(View.GONE);
+                });
             }
         });
     }
+
 
 }

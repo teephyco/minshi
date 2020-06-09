@@ -83,7 +83,6 @@ public class DoorAdapter extends BaseAdapter {
                         dialog.dismiss();
                     });
                     btn_cancel.setOnClickListener(v1 -> dialog.dismiss());
-
                     dialog.show();
                     Objects.requireNonNull(dialog.getWindow()).setLayout((ScreenUtils.getScreenWidth(mContext)/4*3), LinearLayout.LayoutParams.WRAP_CONTENT);
                     return false;

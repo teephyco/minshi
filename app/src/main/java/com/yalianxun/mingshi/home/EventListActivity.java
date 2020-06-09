@@ -16,6 +16,7 @@ import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.EventAdapter;
 import com.yalianxun.mingshi.beans.Event;
 import com.yalianxun.mingshi.utils.DateUtil;
+import com.yalianxun.mingshi.utils.HttpUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -71,7 +72,18 @@ public class EventListActivity extends BaseActivity {
                     "2019-06-12 16:48:25","2019-07-12 15:48:25");
             settledData.add(event);
         }
-        getHttps();
+        //getHttps();
+        HttpUtils.getEventReportList("10010345712344", "1001", "13923745307", new HttpUtils.OnNetResponseListener() {
+            @Override
+            public void onNetResponseError(String msg) {
+
+            }
+
+            @Override
+            public void onNetResponseSuccess(String string) {
+
+            }
+        });
 
 
     }
@@ -85,51 +97,6 @@ public class EventListActivity extends BaseActivity {
         }else {
             showListContent(findViewById(R.id.event_type1), findViewById(R.id.event_type2),settledData);
         }
-    }
-
-    private void getHttps(){
-        OkHttpClient okHttpClient=new OkHttpClient();
-        final Request request=new Request.Builder()
-                .url("http://192.168.1.103:8088/api/finger/event/getEventReportList?projectId=10010345712344&houseNum=1001&phone=13923745307")
-                .get()
-                .build();
-        final Call call = okHttpClient.newCall(request);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Response response = call.execute();
-                    if(response.body() != null){
-                        try {
-                            String str = response.body().string();
-                            JSONObject jsonObjectALL = new JSONObject(str);
-                            JSONArray jsonArray = jsonObjectALL.getJSONArray("dataList");
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                // JSON数组里面的具体-JSON对象
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String content = jsonObject.optString("content", "");
-                                long reportTime = jsonObject.optLong("reportTime", 0);
-                                String picUrl = jsonObject.optString("picUrl", "");
-
-                                // 日志打印结果：
-                                String timestamp = DateUtil.getTime(reportTime,1);
-                                Log.d("okhttp", "解析的结果：content" + content + " reportTime: " + timestamp + " picUrl:" + picUrl);
-                            }
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-
-
-                } catch (IOException e) {
-                    Log.d("okhttp","Fail reason : "+ e.getMessage());
-
-                    e.printStackTrace();
-
-                }
-            }
-        }).start();
     }
 
     private void showListContent(View v1,View v2, List<Event> list){
