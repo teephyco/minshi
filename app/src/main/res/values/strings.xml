@@ -40,7 +40,7 @@
     <string name="face_status_null">未上传人脸</string>
     <string name="face_status_ok">已上传人脸</string>
     <string name="recording_face">人脸录入</string>
-    <string name="input_telephone_number">输入手机号</string>
+    <string name="input_telephone_number">请输入手机号码</string>
     <string name="input_password">输入密码</string>
     <string name="password_contain">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="forget_password">忘记密码？</string>
@@ -79,5 +79,6 @@
     <string name="unpaid_total">未缴金额合计</string>
     <string name="accountBalance">预存款余额</string>
     <string name="check_detail">查看详情</string>
+    <string name="immediate_experience">立即体验</string>
 
 </resources>

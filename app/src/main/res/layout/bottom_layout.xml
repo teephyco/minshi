@@ -13,7 +13,6 @@
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/bottom_iv1"
-            android:src="@drawable/icon_mingshi_home_def"
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:layout_width="30dp"
@@ -31,7 +30,6 @@
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/bottom_iv2"
-            android:src="@drawable/icon_mingshi_od_def"
             android:layout_marginTop="10dp"
             android:layout_width="30dp"
             android:onClick="translation"
@@ -48,7 +46,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent">
         <ImageView
-            android:src="@drawable/icon_mingshi_per_def"
             android:id="@+id/bottom_iv3"
             android:onClick="translation"
             android:tag="self"

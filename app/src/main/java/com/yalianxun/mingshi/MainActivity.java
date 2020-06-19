@@ -54,10 +54,10 @@ public class MainActivity extends BaseActivity {
             //判断是否已经登陆
             boolean login = sharedPreferences.getBoolean("login",false);
             if(!login){
-                mHandler.sendEmptyMessageDelayed(2,1000);
+                mHandler.sendEmptyMessageDelayed(1,500);
             }else {
                 //进入主界面
-                mHandler.sendEmptyMessageDelayed(3,1000);
+                mHandler.sendEmptyMessageDelayed(3,500);
             }
         }else {
             SharedPreferences.Editor editor=sharedPreferences.edit();
@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.CALL_PHONE,
                     Manifest.permission.CAMERA};
-            requestDangerousPermissions(permissionsGroup,1000);
+            requestDangerousPermissions(permissionsGroup,500);
         }
     }
     /**
@@ -135,7 +135,4 @@ public class MainActivity extends BaseActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
     }
 
-    public void login(View view) {
-
-    }
 }

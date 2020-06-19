@@ -1,118 +1,93 @@
 package com.yalianxun.mingshi;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-public class WelcomeActivity extends BaseActivity implements  View.OnTouchListener, GestureDetector.OnGestureListener{
+import androidx.viewpager.widget.ViewPager;
 
-    private ImageView iv;
-    private TextView tv;
-    private int index = 0;
-    private GestureDetector mGestureDetector;
-    @SuppressLint("ClickableViewAccessibility")
+import com.yalianxun.mingshi.adapter.YLXPagerAdapter;
+import com.yalianxun.mingshi.beans.ImageInfo;
+
+import java.util.ArrayList;
+
+
+public class WelcomeActivity extends BaseActivity{
+
+    int oldPosition = 0;
+    ArrayList<ImageInfo> imageList = new ArrayList<>();
+    private int currentPosition;
+    private LinearLayout ll_dots;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        iv = findViewById(R.id.welcome_iv);
-        iv.setImageResource(R.drawable.welcome1);
-        tv = findViewById(R.id.welcome_tv);
-        //实现左右滑动跳转
-        LinearLayout mLinearLayout = findViewById(R.id.drag_l);
-        mLinearLayout.setOnTouchListener(this);
+        ll_dots = findViewById(R.id.ll_dots);
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        findViewById(R.id.welcome_iv).setVisibility(View.INVISIBLE);
+        initDate();
+        initDots();
 
+        YLXPagerAdapter adapter = new YLXPagerAdapter(this,imageList);
+        adapter.setCallback(this::goToLogin);
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+                currentPosition = position;
+                //设置小点监听
+                changeDots();
+            }
 
-        mLinearLayout.setLongClickable(true);
+        });
 
-        mGestureDetector = new GestureDetector(this,
-                this);
-    }
-    @Override
-    public boolean
-    onDown(MotionEvent e) {
-
-        return false;
-    }
-
-    //短按触摸屏
-
-    @Override
-    public void
-    onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
-    @Override
-    public void onLongPress(MotionEvent e) {
 
     }
-    @Override
-    public boolean
-    onFling(MotionEvent e1, MotionEvent e2, float velocityX, float
-            velocityY) {
 
-        final int FLING_MIN_DISTANCE = 200;
-
-        final int FLING_MIN_VELOCITY = 200;
-
-        if (Math.abs((int) (e1.getX() - e2.getX())) >
-                FLING_MIN_DISTANCE && Math.abs(velocityX) >
-                FLING_MIN_VELOCITY) {//左滑右滑皆可
-
-            //Toast.makeText(this, "drag it " + (int) (e1.getX() - e2.getX()) + " velocityX : " + velocityX, Toast.LENGTH_SHORT).show();
-            int dragDistance = (int) (e1.getX() - e2.getX());
-            if(dragDistance > 0){
-                //Toast.makeText(this, "drag it left" ,Toast.LENGTH_SHORT).show();
-                if(index == 0){
-                    iv.setImageResource(R.drawable.welcome2);
-                    index = 1;
-                }else if(index == 1){
-                    iv.setImageResource(R.drawable.welcome3);
-                    tv.setVisibility(View.VISIBLE);
-                    index = 2;
-                }
-
-
-            }else{
-                //Toast.makeText(this, "drag it right" ,Toast.LENGTH_SHORT).show();
-                if(index == 2){
-                    tv.setVisibility(View.GONE);
-                    iv.setImageResource(R.drawable.welcome2);
-                    index = 1;
-                }else if(index == 1){
-                    iv.setImageResource(R.drawable.welcome1);
-                    index = 0;
-                }
+    private void initDate(){
+        imageList.add(new ImageInfo("1","人脸识别 ·自动放行"));
+        imageList.add(new ImageInfo("2","物业报修 ·聊天缴费"));
+        imageList.add(new ImageInfo("3","资讯详情 ·实时更新"));
+    }
+    private void changeDots() {
+        int dotPosition = currentPosition;
+        for (int i = 0; i < ll_dots.getChildCount(); i++) {
+            ImageView imageView = (ImageView) ll_dots.getChildAt(i);
+            if (i == dotPosition) {
+                // 从线性布局中取出对应小点,设置点亮
+                imageView.setImageResource(R.drawable.ic_image_selected);
+            } else {
+                imageView.setImageResource(R.drawable.ic_image_unselected);
             }
         }
-
-        return false;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return mGestureDetector.onTouchEvent(event);
+    private void initDots() {
+        for (int i = 0; i < imageList.size(); i++) {
+            ImageView imageView = new ImageView(this);
+            // 如果是第一页,设置为选中图片
+            if (i == 0) {
+                imageView.setImageResource(R.drawable.ic_image_selected);
+            } else {
+                imageView.setImageResource(R.drawable.ic_image_unselected);
+            }
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(40, 20);
+            params.setMargins(5, 5, 5, 5);
+            ll_dots.addView(imageView, params);
+        }
     }
-
-    public void login(View view) {
-        Log.i("xph"," Login");
+    public void goToLogin() {
         startActivity(new Intent(this,LoginActivity.class));
         finish();
     }
