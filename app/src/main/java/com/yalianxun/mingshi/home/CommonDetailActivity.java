@@ -20,6 +20,7 @@ public class CommonDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_detail);
+        changStatusIconColor(true);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(getIntent().getStringExtra("title"));
         tv = findViewById(R.id.cd_title);

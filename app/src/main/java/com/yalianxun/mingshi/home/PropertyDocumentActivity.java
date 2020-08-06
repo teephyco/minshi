@@ -28,6 +28,7 @@ public class PropertyDocumentActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_document);
+        changStatusIconColor(true);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.property_file);
         List<ImageInfo> imageInfoList = new ArrayList<>();
