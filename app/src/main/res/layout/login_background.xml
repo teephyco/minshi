@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
     <ImageView
+        android:id="@+id/background_head"
         android:contentDescription="@string/my_picture"
         android:src="@drawable/top_background"
         android:scaleType="fitXY"

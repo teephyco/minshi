@@ -31,6 +31,7 @@ public class FaceManagerActivity extends BaseActivity {
         setContentView(R.layout.activity_face_manager);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.face_manager);
+        changStatusIconColor(true);
     }
 
     public void goBack(View view) {
@@ -68,7 +69,7 @@ public class FaceManagerActivity extends BaseActivity {
                             //改变布局 同时上传照片到服务器
                             TextView tv = findViewById(R.id.fm_status);
                             tv.setText("审核中");
-                            tv.setTextColor(Color.parseColor("#ff0000"));
+                            tv.setTextColor(Color.parseColor("#FFCA00"));
                             tv = findViewById(R.id.upload_status);
                             tv.setText("已上传照片");
                             ImageView headIv = findViewById(R.id.fm_picture);

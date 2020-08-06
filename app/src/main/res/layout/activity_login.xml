@@ -41,6 +41,7 @@
         android:layout_height="match_parent">
         <ImageView
             android:contentDescription="@string/my_picture"
+            android:visibility="visible"
             android:src="@drawable/theme_head"
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -79,6 +80,7 @@
                 android:layout_height="40dp">
 
                 <ImageView
+                    android:id="@+id/head_iv"
                     android:layout_marginStart="10dp"
                     android:contentDescription="@string/my_picture"
                     android:src="@drawable/ic_head_default"
@@ -114,6 +116,7 @@
                 android:layout_height="40dp">
 
                 <ImageView
+                    android:id="@+id/pw_iv"
                     android:layout_marginStart="10dp"
                     android:contentDescription="@string/my_picture"
                     android:src="@drawable/ic_lock_default"
@@ -168,7 +171,7 @@
                 android:src="@drawable/logo_text"
                 android:contentDescription="@string/my_picture"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"/>
+                android:layout_height="24dp"/>
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

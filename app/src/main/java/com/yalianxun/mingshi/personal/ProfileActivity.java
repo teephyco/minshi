@@ -47,7 +47,7 @@ public class ProfileActivity extends BaseActivity {
         sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
         String nickName = sharedPreferences.getString("nickName","");
         if(!nickName.equals("")){
-            et.setText(nickName);
+            et.setHint(nickName);
         }
         String path = sharedPreferences.getString("profilePicture","");
         if(!path.equals("")){
@@ -119,28 +119,6 @@ public class ProfileActivity extends BaseActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("nickName",et.getText().toString());
         if(!picturePath.equals("")){
-//            try {
-//                int byteSum = 0;
-//                int byteRead;
-//                File oldFile = new File(picturePath);
-//                Log.d("ss"," name" +oldFile.getName() );
-//                if (oldFile.exists()) { //文件存在时
-//                    InputStream inStream = new FileInputStream(picturePath); //读入原文件
-//                    FileOutputStream fs = new FileOutputStream("/storage/emulated/0/Android/data/com.yalianxun.mingshi/files/" + oldFile.getName());
-//                    byte[] buffer = new byte[1444];
-//                    while ( (byteRead = inStream.read(buffer)) != -1) {
-//                        byteSum += byteRead; //字节数 文件大小
-//                        System.out.println(byteSum);
-//                        fs.write(buffer, 0, byteRead);
-//                    }
-//                    inStream.close();
-//                }
-//            }
-//            catch (Exception e) {
-//                System.out.println("复制单个文件操作出错");
-//                e.printStackTrace();
-//
-//            }
             editor.putString("profilePicture",picturePath);
         }
         editor.apply();

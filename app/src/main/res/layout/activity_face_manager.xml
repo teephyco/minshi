@@ -1,10 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <View
+        android:background="@color/picture_color_white"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"/>
 
-    <include layout="@layout/back_bar"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@color/picture_color_white"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center"
+            android:onClick="goBack"
+            android:src="@drawable/ic_back_arrow_black"
+            android:layout_height="20dp"
+            android:contentDescription="@android:string/search_go"/>
+        <TextView
+            android:id="@+id/av_title"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="match_parent"/>
+        <View
+            android:layout_width="42dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <View
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:background="@color/background_color"
+        android:layout_height="5dp"/>
     <LinearLayout
         android:id="@+id/fm_manager_show"
         android:visibility="gone"
@@ -118,31 +152,37 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/face_manager_default"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@color/picture_color_white"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="100dp"
             android:contentDescription="@string/my_picture"
             android:layout_gravity="center"
             android:src="@drawable/face_default"
-            android:layout_width="218dp"
-            android:layout_height="194dp"/>
+            android:layout_width="250dp"
+            android:layout_height="250dp"/>
         <LinearLayout
             android:layout_marginTop="60dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="50dp">
             <TextView
                 android:onClick="choosePicture"
                 android:background="@drawable/blue_button"
                 android:layout_gravity="center"
+                android:textStyle="bold"
                 android:textColor="@color/app_color_f6"
                 android:gravity="center"
                 android:textSize="20sp"
                 android:text="@string/upload_photo"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="match_parent"/>
         </LinearLayout>
 

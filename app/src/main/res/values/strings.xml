@@ -46,14 +46,17 @@
     <string name="forget_password">忘记密码？</string>
     <string name="login">登录</string>
     <string name="change_world">科技改变生活</string>
-    <string name="get_verification_code">获取验证码</string>
+    <string name="get_verification_code">点击获取验证码</string>
     <string name="next">下一步</string>
-    <string name="input_verification_code">输入验证码</string>
+    <string name="input_verification_code">请输入验证码</string>
     <string name="forget_pw">忘记密码</string>
     <string name="set_pw">设置密码</string>
-    <string name="input_set_tips">请输入6–16位数字或字母</string>
+    <string name="input_set_tips">请输入6~16位数字或字母</string>
+    <string name="input_again">请再次输入6~16位数字或字母</string>
     <string name="sure">确定</string>
     <string name="temp_name">张三</string>
+    <string name="type_host">业主</string>
+    <string name="type_custom">住户</string>
     <string name="temp_location">海湾国际小区16栋6单元307号</string>
     <string name="modify_pw">修改密码</string>
     <string name="about_us">关于我们</string>
@@ -61,7 +64,7 @@
     <string name="sign_out">退出登录</string>
     <string name="save_it">保存</string>
     <string name="trace_recording">出入记录</string>
-    <string name="upload_photo">上传照片</string>
+    <string name="upload_photo">立即上传</string>
     <string name="fm_location">海港豪庭18栋1103</string>
     <string name="fm_pass">已通过</string>
     <string name="upload_repeat">重新上传</string>
@@ -80,5 +83,17 @@
     <string name="accountBalance">预存款余额</string>
     <string name="check_detail">查看详情</string>
     <string name="immediate_experience">立即体验</string>
+    <string name="description_info">“联家“是深圳市亚联训网络通讯有限公司旗下主打的社区综合服务平台，为广大用户提供物业信息、房屋装修、周边商家信息、智能家居控制、健康体检、预约挂号等服务。\n\n我们的APP只为小区住户服务,对象专一、服务周到，为您的生活、家居、安全、健康都带来了更高的保障，让社区与家庭更和谐，生活更便捷。</string>
+    <string name="app_version">V1.0.0</string>
+    <string name="history_events">历史报事</string>
+    <string name="commit">确认提交</string>
+    <string name="service_type">请选择服务类别</string>
+    <string name="family_maintain">家庭维修</string>
+    <string name="guarantee">公区保修</string>
+    <string name="advice">投诉建议</string>
+    <string name="zero">0</string>
+    <string name="limit_num">/200</string>
+    <string name="input_report_content">请填写报事内容</string>
+    <string name="report_photos">图片信息</string>
 
 </resources>

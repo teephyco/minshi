@@ -10,12 +10,14 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.mob.MobSDK;
+import com.yalianxun.mingshi.others.YLXTextWatcher;
 import com.yalianxun.mingshi.utils.HttpUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +41,7 @@ public class ForgetPasswordActivity extends BaseActivity {
             String str;
             switch (msg.what) {
                 case 1:
-                    str= time +"秒后重新获取";
+                    str= time +"s后重新获取";
                     verifyTv.setText(str);
                     verifyTv.setTextColor(Color.parseColor("#999999"));
                     verifyTv.setClickable(false);
@@ -74,7 +76,7 @@ public class ForgetPasswordActivity extends BaseActivity {
                 }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                     //获取验证码成功
                     runOnUiThread(() -> {
-                        nextBtn.setBackground(getDrawable(R.drawable.bolder_blue_tv));
+                        nextBtn.setBackground(getDrawable(R.drawable.blue_button));
                         nextBtn.setTextColor(Color.parseColor("#f6f6f6"));
                         nextBtn.setClickable(true);
                     });
@@ -111,6 +113,10 @@ public class ForgetPasswordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
+        initView();
+    }
+
+    private void initView(){
         et = findViewById(R.id.verification_et);
         nextBtn = findViewById(R.id.go_next_btn);
         nextBtn.setBackground(getDrawable(R.drawable.bolder_gray));
@@ -118,6 +124,10 @@ public class ForgetPasswordActivity extends BaseActivity {
         nextBtn.setClickable(false);
         phoneEt = findViewById(R.id.forget_telephone_et);
         verifyTv = findViewById(R.id.get_verify_tv);
+        ImageView iv = findViewById(R.id.head_iv);
+        phoneEt.addTextChangedListener(new YLXTextWatcher(iv,R.drawable.ic_head_default,R.drawable.ic_head_highlight));
+        iv = findViewById(R.id.security_iv);
+        et.addTextChangedListener(new YLXTextWatcher(iv,R.drawable.ic_security_default,R.drawable.ic_security_highlight));
     }
 
 

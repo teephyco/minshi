@@ -54,7 +54,7 @@
                 <ImageView
                     android:layout_marginStart="15dp"
                     android:contentDescription="@string/my_picture"
-                    android:src="@drawable/location"
+                    android:src="@drawable/ic_location"
                     android:layout_width="30dp"
                     android:layout_height="30dp"/>
                 <TextView

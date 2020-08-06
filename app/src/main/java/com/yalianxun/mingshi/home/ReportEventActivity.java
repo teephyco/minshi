@@ -66,7 +66,7 @@ public class ReportEventActivity extends BaseActivity {
         setContentView(R.layout.activity_report);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.my_question);
-        initEditTextAndTextView(findViewById(R.id.et),findViewById(R.id.change_tv),200);
+        initEditTextAndTextView(findViewById(R.id.et),findViewById(R.id.change_tv));
         RecyclerView mRecyclerView = findViewById(R.id.recycler);
         FullyGridLayoutManager manager = new FullyGridLayoutManager(this,
                 3, GridLayoutManager.VERTICAL, false);
@@ -90,7 +90,7 @@ public class ReportEventActivity extends BaseActivity {
             setTextViewStyle(R.drawable.bolder_unselected,"#000000");
         }
         tempTv = (TextView)view;
-        setTextViewStyle(R.drawable.bolder_selected,"#199ED8");
+        setTextViewStyle(R.drawable.bolder_selected,"#1677ff");
     }
 
     public void setTextViewStyle(int bolder,String color){
@@ -98,7 +98,7 @@ public class ReportEventActivity extends BaseActivity {
         tempTv.setTextColor(Color.parseColor(color));
     }
 
-    protected void initEditTextAndTextView(final EditText et, final TextView tv, final int maxNum){
+    protected void initEditTextAndTextView(final EditText et, final TextView tv){
         et.addTextChangedListener(new TextWatcher() {
             private CharSequence temp;
             private int selectionStart;
@@ -116,7 +116,7 @@ public class ReportEventActivity extends BaseActivity {
                 tv.setText("" + number);
                 selectionStart = et.getSelectionStart();
                 selectionEnd = et.getSelectionEnd();
-                if (temp.length() > maxNum) {
+                if (temp.length() > 200) {
                     s.delete(selectionStart - 1, selectionEnd);
                     int tempSelection = selectionEnd;
                     et.setText(s);

@@ -18,6 +18,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.LoginActivity;
 import com.yalianxun.mingshi.R;
+import com.yalianxun.mingshi.open.FaceManagerActivity;
+import com.yalianxun.mingshi.open.TripRecordActivity;
 import com.yalianxun.mingshi.utils.SharedPreferencesManager;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -80,7 +82,7 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1000 && resultCode == 1001 && data != null){
             String path = data.getStringExtra("path");
-            if(path != null)
+            if(path != null && !path.equals(""))
             Glide.with(getContext())
                     .load(path)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -144,5 +146,13 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return mGestureDetector.onTouchEvent(event);
+    }
+
+    public void faceManager(View view) {
+        startActivity(new Intent(this, FaceManagerActivity.class));
+    }
+
+    public void traceRecord(View view) {
+        startActivity(new Intent(this, TripRecordActivity.class));
     }
 }

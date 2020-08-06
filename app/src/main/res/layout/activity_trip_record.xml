@@ -28,12 +28,12 @@
             android:layout_marginTop="17dp"
             android:layout_width="match_parent"
             android:layout_height="25dp">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:src="@drawable/location"
+            <ImageView
+                android:src="@drawable/ic_location"
                 android:contentDescription="@string/my_picture"
                 android:layout_marginStart="20dp"
                 android:layout_width="25dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="25dp"/>
             <TextView
                 android:onClick="chooseDoor"
                 android:id="@+id/tr_my_door"

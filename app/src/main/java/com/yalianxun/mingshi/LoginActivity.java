@@ -4,6 +4,9 @@ package com.yalianxun.mingshi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.yalianxun.mingshi.home.HomeActivity;
+import com.yalianxun.mingshi.others.YLXTextWatcher;
 import com.yalianxun.mingshi.utils.HttpUtils;
 import com.yalianxun.mingshi.utils.SharedPreferencesManager;
 
@@ -28,15 +32,29 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        phoneET = findViewById(R.id.login_telephone_et);
-        passwordET = findViewById(R.id.login_password_et);
+        initView();
+
     }
 
+    private void initView(){
+        phoneET = findViewById(R.id.login_telephone_et);
+        passwordET = findViewById(R.id.login_password_et);
+        ImageView iv = findViewById(R.id.head_iv);
+        phoneET.addTextChangedListener(new YLXTextWatcher(iv,R.drawable.ic_head_default,R.drawable.ic_head_highlight));
+        iv = findViewById(R.id.pw_iv);
+        passwordET.addTextChangedListener(new YLXTextWatcher(iv,R.drawable.ic_lock_default,R.drawable.ic_lock_highlight));
+//        ImageView imageView = findViewById(R.id.background_head);
+//        imageView.setImageResource(R.drawable.background_head);
+    }
     public void forgetPassword(View view) {
         startActivity(new Intent(this,ForgetPasswordActivity.class));
+//        startActivity(new Intent(this,TestActivity.class));
     }
 
     public void goHome(View view) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
         if(!HttpUtils.checkPhoneNumber(phoneET.getText().toString())){
             if(phoneET.getText().toString().equals("")){
                 Toast.makeText(this,"请输入手机号",Toast.LENGTH_SHORT).show();

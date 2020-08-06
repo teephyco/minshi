@@ -28,4 +28,16 @@ public class BaseActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(Color.TRANSPARENT);
     }
+
+    public void changStatusIconColor(boolean setDark) {
+
+        View decorView = getWindow().getDecorView();
+        int vis = decorView.getSystemUiVisibility();
+        if(setDark){
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        } else{
+            vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        }
+        decorView.setSystemUiVisibility(vis);
+    }
 }

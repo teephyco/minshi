@@ -1,32 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/back_bar"/>
     <View
-        android:layout_marginTop="10dp"
-        android:background="@color/darkGray"
+        android:background="@color/picture_color_white"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="36dp"/>
     <LinearLayout
         android:orientation="horizontal"
+        android:background="@color/picture_color_white"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="40dp">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center"
+            android:onClick="goBack"
+            android:src="@drawable/ic_back_arrow_black"
+            android:layout_height="20dp"
+            android:contentDescription="@android:string/search_go" />
+        <TextView
+            android:id="@+id/av_title"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="match_parent"/>
+        <View
+            android:layout_width="42dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:background="@color/picture_color_white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
         <TextView
             android:text="旧密码"
             android:textSize="16sp"
             android:textColor="@color/black_color"
             android:layout_gravity="center"
-            android:layout_marginStart="22dp"
-            android:layout_width="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"/>
         <EditText
             android:id="@+id/old_pw"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:layout_gravity="center"
-            android:layout_marginStart="22dp"
             android:layout_marginEnd="20dp"
             android:inputType="textPassword"
             android:digits="@string/password_contain"
@@ -39,32 +64,26 @@
 
     </LinearLayout>
     <View
-        android:layout_marginTop="1dp"
-        android:background="@color/darkGray"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
-    <View
-        android:layout_marginTop="10dp"
-        android:background="@color/darkGray"
-        android:layout_width="match_parent"
+        android:background="@color/picture_color_white"
+        android:layout_width="12dp"
         android:layout_height="1dp"/>
     <LinearLayout
+        android:background="@color/picture_color_white"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="50dp">
         <TextView
             android:text="新密码"
             android:textSize="16sp"
             android:textColor="@color/black_color"
             android:layout_gravity="center"
-            android:layout_marginStart="22dp"
-            android:layout_width="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"/>
         <EditText
             android:id="@+id/new_pw"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:layout_gravity="center"
-            android:layout_marginStart="22dp"
             android:layout_marginEnd="20dp"
             android:inputType="textPassword"
             android:digits="@string/password_contain"
@@ -76,8 +95,9 @@
             android:layout_height="wrap_content"
             android:importantForAutofill="no" />
         <ImageView
+            android:id="@+id/hide_pw_iv"
             android:onClick="hidePassword"
-            android:src="@drawable/pw_hide"
+            android:src="@drawable/ic_hide_pw"
             android:layout_gravity="center"
             android:contentDescription="@string/my_picture"
             android:layout_marginEnd="20dp"
@@ -86,16 +106,49 @@
 
     </LinearLayout>
     <View
-        android:layout_marginTop="1dp"
-        android:background="@color/darkGray"
-        android:layout_width="match_parent"
+        android:background="@color/picture_color_white"
+        android:layout_width="12dp"
         android:layout_height="1dp"/>
-
     <LinearLayout
-        android:layout_marginTop="70dp"
-        android:orientation="vertical"
+        android:background="@color/picture_color_white"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="52dp">
+        android:layout_height="50dp">
+        <TextView
+            android:text="确认密码"
+            android:textSize="16sp"
+            android:textColor="@color/black_color"
+            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/input_pw_again"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="20dp"
+            android:inputType="textPassword"
+            android:digits="@string/password_contain"
+            android:maxLength="16"
+            android:background="@android:color/transparent"
+            android:hint="@string/input_again"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no" />
+        <ImageView
+            android:id="@+id/hide_confirm_pw_iv"
+            android:onClick="hideConfirmPassword"
+            android:src="@drawable/ic_hide_pw"
+            android:layout_gravity="center"
+            android:contentDescription="@string/my_picture"
+            android:layout_marginEnd="20dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
+
+    </LinearLayout>
+
+
         <TextView
             android:onClick="sure"
             android:background="@drawable/blue_button"
@@ -104,8 +157,10 @@
             android:gravity="center"
             android:textSize="20sp"
             android:text="@string/sure"
-            android:layout_width="220dp"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
 
 </LinearLayout>

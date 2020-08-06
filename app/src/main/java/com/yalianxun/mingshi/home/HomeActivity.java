@@ -40,7 +40,11 @@ public class HomeActivity extends BaseActivity {
     private void initView(){
         SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
         String response = sharedPreferences.getString("loginResponse","");
-        list = JsonUtil.getJsonUtil().getUserInfoList(response);
+        UserInfo use = new UserInfo("","","","","","","","","");
+        List<UserInfo> array = new ArrayList<>();
+        array.add(use);
+//        list = JsonUtil.getJsonUtil().getUserInfoList(response);
+        list = array;
         for(UserInfo userInfo : list){
             String location = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum();
             locations.add(location);
