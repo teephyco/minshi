@@ -36,7 +36,6 @@ public class EventDetailActivity extends BaseActivity {
                 findViewById(R.id.feedback_layout).setVisibility(View.VISIBLE);
             }else if(event.getStatus() == 2){
                 ((TextView)findViewById(R.id.ed_status)).setText("已完成");
-                ((TextView)findViewById(R.id.ed_status)).setTextColor(Color.parseColor("#199ED8"));
                 findViewById(R.id.feedback_layout).setVisibility(View.VISIBLE);
             }
             ((TextView)findViewById(R.id.ed_timestamp)).setText(event.getTimeStamp());

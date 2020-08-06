@@ -3,6 +3,7 @@ package com.yalianxun.mingshi.home;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -33,6 +34,8 @@ import okhttp3.Response;
 public class EventListActivity extends BaseActivity {
     List<Event> unsettledData = new ArrayList<>();
     List<Event> settledData = new ArrayList<>();
+    private TextView untreated_tv;
+    private TextView finished_tv;
     EventAdapter adapter;
     ListView listView;
     @Override
@@ -45,7 +48,10 @@ public class EventListActivity extends BaseActivity {
 //        String brand = android.os.Build.BRAND;
 //        Log.d("xph","brand " + brand + " type " + Build.MODEL);
         initData();
-        showListContent(findViewById(R.id.event_type2), findViewById(R.id.event_type1),unsettledData);
+        changStatusIconColor(true);
+        finished_tv = findViewById(R.id.finished);
+        untreated_tv = findViewById(R.id.untreated);
+        showListContent(untreated_tv,finished_tv,findViewById(R.id.event_type2), findViewById(R.id.event_type1),unsettledData);
     }
     private void initData() {
         Event event = new Event(0,"2019-06-07 16:48:25",0,"公区报修",
@@ -92,14 +98,17 @@ public class EventListActivity extends BaseActivity {
     }
 
     public void switchList(View view) {
+
         if(view.findViewById(R.id.event_type1) != null){
-            showListContent(findViewById(R.id.event_type2), findViewById(R.id.event_type1),unsettledData);
+            showListContent(untreated_tv,finished_tv,findViewById(R.id.event_type2), findViewById(R.id.event_type1),unsettledData);
         }else {
-            showListContent(findViewById(R.id.event_type1), findViewById(R.id.event_type2),settledData);
+            showListContent(finished_tv,untreated_tv,findViewById(R.id.event_type1), findViewById(R.id.event_type2),settledData);
         }
     }
 
-    private void showListContent(View v1,View v2, List<Event> list){
+    private void showListContent(TextView tv1,TextView tv2,View v1,View v2, List<Event> list){
+        tv1.setTextColor(Color.parseColor("#1677ff"));
+        tv2.setTextColor(Color.parseColor("#000000"));
         v1.setVisibility(View.INVISIBLE);
         v2.setVisibility(View.VISIBLE);
         adapter = new EventAdapter(list,this);

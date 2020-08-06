@@ -1,12 +1,14 @@
 package com.yalianxun.mingshi.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -83,9 +85,11 @@ public class EventAdapter extends BaseAdapter {
         if(pr != null){
             vh.tv1.setText(pr.getContent());
             vh.tv3.setText(pr.getCurrentStatus());
+            vh.tv3.setTextColor(Color.parseColor("#FF6200"));
             vh.tv4.setText(pr.getTimeStamp());
             if(pr.getStatus() == 0){
-                vh.tv7.setText("未处理");
+                vh.tv7.setText("待处理");
+                vh.tv7.setAlpha(1.0f);
                 vh.ll3.setVisibility(View.GONE);
                 vh.ll2.setVisibility(View.VISIBLE);
                 vh.tv8.setOnClickListener(v -> {
@@ -95,14 +99,17 @@ public class EventAdapter extends BaseAdapter {
                 });
             }else if(pr.getStatus() == 1){
                 vh.tv7.setText("处理中");
+                vh.tv7.setAlpha(0.6f);
                 vh.ll3.setVisibility(View.GONE);
                 vh.tv3.setText("物业正在处理");
+                vh.tv3.setTextColor(Color.parseColor("#cdcdcd"));
                 vh.tv4.setText(pr.getStartTime());
-                vh.ll2.setVisibility(View.INVISIBLE);
+                vh.ll2.setVisibility(View.GONE);
             }else if(pr.getStatus() == 2){
                 vh.tv7.setText("已完成");
+                vh.tv7.setBackgroundResource(R.drawable.gray_bolder);
                 vh.ll3.setVisibility(View.VISIBLE);
-                vh.tv5.setText("完成时间");
+                vh.tv5.setText("完成时间 : ");
                 vh.tv6.setText(pr.getEndTime());
                 vh.ll2.setVisibility(View.GONE);
             }
@@ -152,7 +159,7 @@ public class EventAdapter extends BaseAdapter {
         TextView tv7;
         TextView tv8;
         LinearLayout ll;
-        LinearLayout ll2;
+        RelativeLayout ll2;
         LinearLayout ll3;
         ImageView iv1;
         ImageView iv2;
