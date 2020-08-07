@@ -23,8 +23,8 @@ public class CommonDetailActivity extends BaseActivity {
         changStatusIconColor(true);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(getIntent().getStringExtra("title"));
-        tv = findViewById(R.id.cd_title);
-        tv.setText(getIntent().getStringExtra("title"));
+//        tv = findViewById(R.id.cd_title);
+//        tv.setText(getIntent().getStringExtra("title"));
         List<ImageInfo> imageInfoList = new ArrayList<>();
 
         if(Objects.equals(getIntent().getStringExtra("title"), "长广深物业营业执照")){

@@ -95,5 +95,6 @@
     <string name="limit_num">/200</string>
     <string name="input_report_content">请填写报事内容</string>
     <string name="report_photos">图片信息</string>
+    <string name="emergency_notice">紧急通知</string>
 
 </resources>

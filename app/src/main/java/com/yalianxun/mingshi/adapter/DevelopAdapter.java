@@ -57,7 +57,7 @@ public class DevelopAdapter extends BaseAdapter {
             vh.tv2 = item.findViewById(R.id.common_timestamp);
             vh.tv3 = item.findViewById(R.id.common_click_count);
             vh.tv4 = item.findViewById(R.id.info_content);
-            vh.iv = item.findViewById(R.id.develop_iv);
+//            vh.iv = item.findViewById(R.id.develop_iv);
 
             item.setTag(vh);
         } else {
@@ -74,11 +74,11 @@ public class DevelopAdapter extends BaseAdapter {
         vh.tv4.setText(notification.getContent());
         String str = "" + notification.getCountNum();
         vh.tv3.setText(str);
-        Glide.with(mContext)
-                .load(notification.getImgUrl())
-                .placeholder(R.drawable.placeholder_pic)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(vh.iv);
+//        Glide.with(mContext)
+//                .load(notification.getImgUrl())
+//                .placeholder(R.drawable.placeholder_pic)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .into(vh.iv);
         return item;
     }
 
@@ -91,6 +91,6 @@ public class DevelopAdapter extends BaseAdapter {
         TextView tv2;
         TextView tv3;
         TextView tv4;
-        ImageView iv;
+//        ImageView iv;
     }
 }

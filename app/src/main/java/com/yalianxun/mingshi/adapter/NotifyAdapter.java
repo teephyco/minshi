@@ -54,6 +54,7 @@ public class NotifyAdapter extends BaseAdapter {
             vh.tv2 = item.findViewById(R.id.common_timestamp);
             vh.tv3 = item.findViewById(R.id.common_click_count);
             vh.tv4 = item.findViewById(R.id.info_content);
+            vh.emergency = item.findViewById(R.id.emergency_notice);
             //找到复选框
             //让item和ViewHolder绑定在一起
             item.setTag(vh);
@@ -72,6 +73,11 @@ public class NotifyAdapter extends BaseAdapter {
         String str = "" + notification.getCountNum();
         vh.tv3.setText(str);
 
+        if(position != 0){
+            vh.emergency.setVisibility(View.GONE);
+        }else {
+            vh.emergency.setVisibility(View.VISIBLE);
+        }
         return item;
     }
 
@@ -84,5 +90,6 @@ public class NotifyAdapter extends BaseAdapter {
         TextView tv2;
         TextView tv3;
         TextView tv4;
+        TextView emergency;
     }
 }
