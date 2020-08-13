@@ -10,12 +10,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.yalianxun.mingshi.utils.SharedPreferencesManager;
+
 public class BaseActivity extends AppCompatActivity {
+    public SharedPreferencesManager SP_MANAGER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStatusBarFullTransparent();
+        SP_MANAGER = new SharedPreferencesManager(this,"YLX");
     }
 
     @SuppressLint("SourceLockedOrientationActivity")

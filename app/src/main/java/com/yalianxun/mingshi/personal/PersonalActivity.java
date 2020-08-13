@@ -12,6 +12,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -28,11 +29,21 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
 
     private CircleImageView headIv;
     private GestureDetector mGestureDetector;
-    @SuppressLint("ClickableViewAccessibility")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
+        initView();
+
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void initView(){
+        TextView textView = findViewById(R.id.user_name);
+        textView.setText(SP_MANAGER.getValue("name",""));
+        textView = findViewById(R.id.user_location);
+        textView.setText(SP_MANAGER.getValue("location",""));
         headIv = findViewById(R.id.head);
         SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
         String path = sharedPreferences.getString("profilePicture","");

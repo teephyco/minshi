@@ -87,13 +87,13 @@ public class PayAdapter extends BaseAdapter {
             vh.tv6.setText("已缴费");
             vh.tv6.setTextColor(Color.parseColor("#cccccc"));
         }else {
-            vh.tv1.setTextColor(Color.parseColor("#199ED8"));
-            vh.tv2.setTextColor(Color.parseColor("#199ED8"));
-            vh.tv3.setTextColor(Color.parseColor("#222222"));
-            vh.tv4.setTextColor(Color.parseColor("#222222"));
-            vh.tv5.setTextColor(Color.parseColor("#199ED8"));
-            vh.tv6.setText("未缴费");
-            vh.tv6.setTextColor(Color.parseColor("#199ED8"));
+            vh.tv1.setTextColor(Color.parseColor("#1677ff"));
+            vh.tv2.setTextColor(Color.parseColor("#1677ff"));
+            vh.tv3.setTextColor(Color.parseColor("#333333"));
+            vh.tv4.setTextColor(Color.parseColor("#333333"));
+            vh.tv5.setTextColor(Color.parseColor("#1677ff"));
+            vh.tv6.setText("待缴费");
+            vh.tv6.setTextColor(Color.parseColor("#ff3100"));
         }
         return item;
     }

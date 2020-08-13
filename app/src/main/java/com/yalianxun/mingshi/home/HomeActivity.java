@@ -14,10 +14,12 @@ import android.widget.TextView;
 
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
+import com.yalianxun.mingshi.TestActivity;
 import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.open.OpenDoorActivity;
 import com.yalianxun.mingshi.personal.PersonalActivity;
 import com.yalianxun.mingshi.utils.JsonUtil;
+import com.yalianxun.mingshi.utils.SharedPreferencesManager;
 import com.yalianxun.mingshi.view.AutoScrollTextView;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class HomeActivity extends BaseActivity {
     private String CUSTOMER_SERVICE_PHONE = "075528716473";
     private TextView userLocationTV;
     private AutoScrollTextView autoScrollTextView;
+    private SharedPreferencesManager SPManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,15 +41,11 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initView(){
-        SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
-        String response = sharedPreferences.getString("loginResponse","");
-        UserInfo use = new UserInfo("","","","","","","","","");
-        List<UserInfo> array = new ArrayList<>();
-        array.add(use);
-//        list = JsonUtil.getJsonUtil().getUserInfoList(response);
-        list = array;
+        SPManager = new SharedPreferencesManager(this,"YLX");
+        String response = SPManager.getValue("loginResponse","");
+        list = JsonUtil.getJsonUtil().getUserInfoList(response);
         for(UserInfo userInfo : list){
-            String location = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum();
+            String location = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum().substring(4);
             locations.add(location);
         }
         userLocationTV = findViewById(R.id.user_location);
@@ -54,8 +53,10 @@ public class HomeActivity extends BaseActivity {
         userInfo = list.get(0);
         String name = "Hello "+ userInfo.getName();
         userTV.setText(name);
-        String currentLocation = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum();
+        String currentLocation = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum().substring(4);
         userLocationTV.setText(currentLocation);
+//        SPManager.putValue("location",currentLocation);
+        saveData();
         autoScrollTextView = findViewById(R.id.first_notify);
         autoScrollTextView.init(getWindowManager());
         autoScrollTextView.startScroll();
@@ -95,7 +96,7 @@ public class HomeActivity extends BaseActivity {
         }else if(tag.contains("life")){
             intent = new Intent(this, LifeInfoActivity.class);
         }else if(tag.contains("document")){
-            intent = new Intent(this, PropertyDocumentActivity.class);
+            intent = new Intent(this, TestActivity.class);
         }
         intent.putExtra("userInfo",userInfo);
         startActivity(intent);
@@ -113,6 +114,7 @@ public class HomeActivity extends BaseActivity {
         lv.setOnItemClickListener((parent, v, position, id) -> {
             userLocationTV.setText(locations.get(position));
             userInfo = list.get(position);
+            saveData();
             CUSTOMER_SERVICE_PHONE = "075522671374";
             hideAlert(v);
         });
@@ -121,5 +123,13 @@ public class HomeActivity extends BaseActivity {
     public void hideAlert(View view) {
         findViewById(R.id.home_dialog).setVisibility(View.GONE);
         findViewById(R.id.home_dialog_lv).setVisibility(View.GONE);
+    }
+
+    private void saveData(){
+        SPManager.putValue("location",userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum().substring(4));
+        SPManager.putValue("projectName",userInfo.getProjectName());
+        SPManager.putValue("buildingName",userInfo.getBuildingName());
+        SPManager.putValue("houseNum",userInfo.getHouseNum().substring(4));
+        SPManager.putValue("houseType",userInfo.getHouseType());
     }
 }

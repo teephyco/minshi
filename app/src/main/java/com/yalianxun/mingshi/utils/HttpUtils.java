@@ -5,8 +5,6 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.yalianxun.mingshi.SettingPasswordActivity;
-
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +24,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpUtils {
-    static public String URL = "http://192.168.1.100:8088/api/";
+    static public String URL = "http://192.168.0.124:8083/api/";
 //    http://124.71.113.203:8000/app/login
 
     //判断手机号格式是否正确
@@ -70,7 +68,7 @@ public class HttpUtils {
 
     public static void gotoLogin(String mobile, String password,String mobileId,String mobileModel,OnNetResponseListener listener){
         OkHttpClient okHttpClient = new OkHttpClient();
-        String url = HttpUtils.URL + "finger/auth/login";
+        String url = HttpUtils.URL + "user/login";
         RequestBody requestBody = new FormBody.Builder()
                 .add("mobile", mobile)
                 .add("password", password)
@@ -232,6 +230,34 @@ public class HttpUtils {
                 }
             }
         }).start();
+    }
+
+    public static void getMonthFeeDetail(String projectID,String houseNum,String date,String openId,OnNetResponseListener listener){
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("projectId", projectID)
+                .add("houseNum", houseNum)
+                .add("yearofmonth",date)
+                .build();
+        String url = URL + "finger/fee/getMonthFeeItemList";
+        Request request = new Request.Builder()
+                .addHeader("openId",openId)
+                .url(url)
+                .post(requestBody)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback(){
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.d("http", "onFailure: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if(response.body() != null)
+                    Log.d("http", "success: " + response.body().string());
+            }
+        });
     }
 
     public interface OnNetResponseListener {

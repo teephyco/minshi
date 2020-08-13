@@ -96,5 +96,10 @@
     <string name="input_report_content">请填写报事内容</string>
     <string name="report_photos">图片信息</string>
     <string name="emergency_notice">紧急通知</string>
+    <string name="unread">未阅读</string>
+    <string name="read">已阅读</string>
+    <string name="open_door_shortcut">一键开门</string>
+    <string name="mod_door_name_tips">请输入名称(10字以内)</string>
+    <string name="first_page">首页</string>
 
 </resources>

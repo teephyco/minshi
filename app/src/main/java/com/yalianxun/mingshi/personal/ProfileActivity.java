@@ -19,6 +19,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
+import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.utils.GlideCacheEngine;
 import com.yalianxun.mingshi.utils.GlideEngine;
 
@@ -35,21 +36,31 @@ public class ProfileActivity extends BaseActivity {
     private CircleImageView headIv;
     private String picturePath = "";
     private EditText et;
-    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        initView();
+    }
+    private void initView(){
+        TextView textView = findViewById(R.id.profile_user);
+        textView.setText(SP_MANAGER.getValue("name",""));
+        textView = findViewById(R.id.profile_telephone);
+        textView.setText(SP_MANAGER.getValue("mobile",""));
+        textView = findViewById(R.id.profile_community);
+        textView.setText(SP_MANAGER.getValue("projectName",""));
+        textView = findViewById(R.id.profile_room_num);
+        String houseNum = SP_MANAGER.getValue("buildingName","") + SP_MANAGER.getValue("houseNum","");
+        textView.setText(houseNum);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.my_profile);
         headIv = findViewById(R.id.profile_head);
         et = findViewById(R.id.profile_nickname);
-        sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
-        String nickName = sharedPreferences.getString("nickName","");
+        String nickName = SP_MANAGER.getValue("nickName","");
         if(!nickName.equals("")){
             et.setHint(nickName);
         }
-        String path = sharedPreferences.getString("profilePicture","");
+        String path = SP_MANAGER.getValue("profilePicture","");
         if(!path.equals("")){
             Glide.with(getContext())
                     .load(path)
@@ -113,15 +124,12 @@ public class ProfileActivity extends BaseActivity {
     public void save(View view) {
 
         Intent intent = new Intent();
-
         intent.putExtra("path",picturePath);
-        Log.i("xph"," picturePath is " + picturePath);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("nickName",et.getText().toString());
+//        Log.i("xph"," picturePath is " + picturePath);
+        SP_MANAGER.putValue("nickName",et.getText().toString());
         if(!picturePath.equals("")){
-            editor.putString("profilePicture",picturePath);
+            SP_MANAGER.putValue("profilePicture",picturePath);
         }
-        editor.apply();
         setResult(1001,intent);
         finish();
     }

@@ -6,7 +6,7 @@
     <ImageView
         android:contentDescription="@string/my_picture"
         android:scaleType="centerCrop"
-        android:src="@drawable/backbround"
+        android:src="@drawable/placeholder_pic"
         android:id="@+id/gv_image"
         android:layout_width="90dp"
         android:layout_height="90dp"/>

@@ -2,6 +2,7 @@ package com.yalianxun.mingshi.home;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -17,12 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyNotifyActivity extends BaseActivity {
+    private TextView untreated_tv;
+    private TextView finished_tv;
     List<Notification> listData = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_notify);
         TextView tv = findViewById(R.id.av_title);
+        finished_tv = findViewById(R.id.finished);
+        untreated_tv = findViewById(R.id.untreated);
         tv.setText(R.string.property_notification);
         initData();
         NotifyAdapter adapter = new NotifyAdapter(listData,this);
@@ -34,6 +39,7 @@ public class PropertyNotifyActivity extends BaseActivity {
 //            intent.putExtra("key","notify");
 //            startActivity(intent);
         });
+        showListContent(untreated_tv,finished_tv,findViewById(R.id.event_type2), findViewById(R.id.event_type1),listData);
     }
 
     private void initData() {
@@ -45,14 +51,24 @@ public class PropertyNotifyActivity extends BaseActivity {
         listData.add(notify);
         notify = new Notification("停电通知","尊敬的业主/住户：\n\t您们好！因业主反映晚间噪音扰民，多次排查无果，故为尽快解决扰民诉求，小区定于2019年12月26日晚22：00--22：30全面（包括电梯）停电排查，届时不便之处，敬请谅解。","2019-09-11",234);
         listData.add(notify);
-//        for (int i=0;i<15;i++){
-//
-//            Notification noti = new Notification("0","","",100*(i+1));
-//            listData.add(noti);
-//        }
     }
 
     public void goBack(View view) {
         finish();
+    }
+
+    public void switchList(View view) {
+        if(view.findViewById(R.id.event_type1) != null){
+            showListContent(untreated_tv,finished_tv,findViewById(R.id.event_type2), findViewById(R.id.event_type1),listData);
+        }else {
+            showListContent(finished_tv,untreated_tv,findViewById(R.id.event_type1), findViewById(R.id.event_type2),listData);
+        }
+    }
+
+    private void showListContent(TextView tv1,TextView tv2,View v1,View v2, List<Notification> list){
+        tv1.setTextColor(Color.parseColor("#1677ff"));
+        tv2.setTextColor(Color.parseColor("#000000"));
+        v1.setVisibility(View.INVISIBLE);
+        v2.setVisibility(View.VISIBLE);
     }
 }

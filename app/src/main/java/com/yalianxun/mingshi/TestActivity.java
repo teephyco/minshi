@@ -9,8 +9,14 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ListView;
 
+import com.yalianxun.mingshi.adapter.DoorAdapter;
+import com.yalianxun.mingshi.beans.Door;
 import com.yalianxun.mingshi.personal.PersonalActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestActivity extends BaseActivity {
     @SuppressLint("SetJavaScriptEnabled")
@@ -45,22 +51,33 @@ public class TestActivity extends BaseActivity {
         Log.d("xph"," end ");
         web.loadUrl("file:///android_asset/dist/index.html");
         Log.d("xph"," finish ");
-        changStatusIconCollor(true);
+        changStatusIconColor(true);
+        List<Door> listViewData = new ArrayList<>();
+        Door door = new Door("1231232412","东区",0);
+        listViewData.add(door);
+        door = new Door("123187678412","西区",1);
+        listViewData.add(door);
+        door = new Door("653233453313","写字楼A区",1);
+        listViewData.add(door);
+        door = new Door("653233773313","地下车库",1);
+        listViewData.add(door);
+        DoorAdapter adapter = new DoorAdapter(listViewData,this);
+        ListView listView = findViewById(R.id.shortcut_open_lv);
+        listView.setAdapter(adapter);
     }
 
     public void goToPersonalCenter(View view) {
         startActivity(new Intent(this, PersonalActivity.class));
     }
 
-    public void changStatusIconCollor(boolean setDark) {
+    public void hideOpenDoor(View view) {
+        findViewById(R.id.open_door_view).setVisibility(View.GONE);
+    }
 
-        View decorView = getWindow().getDecorView();
-        int vis = decorView.getSystemUiVisibility();
-        if(setDark){
-            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        } else{
-            vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        }
-        decorView.setSystemUiVisibility(vis);
+    public void showOpenDoor(View view) {
+        findViewById(R.id.open_door_view).setVisibility(View.VISIBLE);
+    }
+
+    public void doNothing(View view) {
     }
 }

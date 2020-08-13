@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.yalianxun.mingshi.home.HomeActivity;
+import com.yalianxun.mingshi.home.HomePageActivity;
 
 
 public class MainActivity extends BaseActivity {
@@ -35,7 +36,7 @@ public class MainActivity extends BaseActivity {
                 finish();
                 break;
             case 3:
-                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                startActivity(new Intent(MainActivity.this, HomePageActivity.class));
                 finish();
                 break;
         }

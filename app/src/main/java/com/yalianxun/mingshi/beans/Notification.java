@@ -6,8 +6,34 @@ public class Notification {
     private String timestamp;
     private int countNum;
     private String imgUrl;
+    private int resID;
+    private int notificationType;
 
-    public Notification(String title,String content,String timestamp,int countNum){
+    public Notification(String title, String timestamp, int countNum, int resID, int notificationType) {
+        this.title = title;
+        this.timestamp = timestamp;
+        this.countNum = countNum;
+        this.resID = resID;
+        this.notificationType = notificationType;
+    }
+
+    public int getResID() {
+        return resID;
+    }
+
+    public void setResID(int resID) {
+        this.resID = resID;
+    }
+
+    public int getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(int notificationType) {
+        this.notificationType = notificationType;
+    }
+
+    public Notification(String title, String content, String timestamp, int countNum){
         this.title = title;
         this.content = content;
         this.timestamp = timestamp;

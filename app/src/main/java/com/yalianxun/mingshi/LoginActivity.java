@@ -14,9 +14,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.yalianxun.mingshi.home.HomeActivity;
+import com.yalianxun.mingshi.home.HomePageActivity;
 import com.yalianxun.mingshi.others.YLXTextWatcher;
 import com.yalianxun.mingshi.utils.HttpUtils;
 import com.yalianxun.mingshi.utils.SharedPreferencesManager;
+import com.yalianxun.mingshi.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,9 +54,9 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void goHome(View view) {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-        finish();
+//        Intent intent = new Intent(this, HomePageActivity.class);
+//        startActivity(intent);
+//        finish();
         if(!HttpUtils.checkPhoneNumber(phoneET.getText().toString())){
             if(phoneET.getText().toString().equals("")){
                 Toast.makeText(this,"请输入手机号",Toast.LENGTH_SHORT).show();
@@ -94,7 +96,7 @@ public class LoginActivity extends BaseActivity {
             SharedPreferencesManager model = new SharedPreferencesManager(this,"YLX");
             model.saveLoginData(response,phoneET.getText().toString(),passwordET.getText().toString());
 //            跳转到主界面
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, HomePageActivity.class);
             startActivity(intent);
             finish();
         }
@@ -102,7 +104,9 @@ public class LoginActivity extends BaseActivity {
 
     private void showBackground(String reason){
         if(reason.contains("timeout"))
-            Toast.makeText(this,"请求超时",Toast.LENGTH_SHORT).show();
+            ToastUtils.showTextToast(this,"请求超时");
+        else if(reason.length()<7)
+            ToastUtils.showTextToast(this,reason);
         findViewById(R.id.background).setVisibility(View.GONE);
         findViewById(R.id.pay_progress_layout).setVisibility(View.GONE);
     }

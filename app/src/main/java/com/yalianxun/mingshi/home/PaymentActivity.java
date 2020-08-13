@@ -76,6 +76,7 @@ public class PaymentActivity extends BaseActivity {
                 .build();
         String url = HttpUtils.URL + api;
         Request request = new Request.Builder()
+                .addHeader("openId",userInfo.getUserId())
                 .url(url)
                 .post(requestBody)
                 .build();
@@ -118,7 +119,7 @@ public class PaymentActivity extends BaseActivity {
 
     private void loadData(String response){
         if(response.contains("success")){
-            String currentLocation = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum();
+            String currentLocation = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum().substring(4);
             String userName = userInfo.getName();
             String mobile = userInfo.getPhone();
             list = JsonUtil.getJsonUtil().getMonthFeeList(response,currentLocation,userName,mobile);
@@ -128,6 +129,7 @@ public class PaymentActivity extends BaseActivity {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(this,DetailPayActivity.class);
             MonthFee temp = list.get(position);
+            intent.putExtra("userInfo",userInfo);
             intent.putExtra("pr",temp);
             startActivity(intent);
         });
