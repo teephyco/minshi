@@ -2,18 +2,19 @@ package com.yalianxun.mingshi.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.GridView;
+import android.widget.ListView;
 
-public class CustomGridView extends GridView {
-    public CustomGridView(Context context) {
+public class CustomListView extends ListView {
+
+    public CustomListView(Context context) {
         super(context);
     }
 
-    public CustomGridView(Context context, AttributeSet attrs) {
+    public CustomListView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CustomGridView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

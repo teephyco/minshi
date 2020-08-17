@@ -54,13 +54,11 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
         ImageInfo imageInfo = dataList.get(position);
         if (imageInfo != null){
             viewHolder.title.setText(imageInfo.getImgName());
+            viewHolder.imageView.setImageResource(imageInfo.getResID());
         }
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(v, position);
-                }
+        viewHolder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(v, position);
             }
         });
 

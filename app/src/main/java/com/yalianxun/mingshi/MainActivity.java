@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,12 +15,20 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.yalianxun.mingshi.home.HomeActivity;
 import com.yalianxun.mingshi.home.HomePageActivity;
+import com.yalianxun.mingshi.utils.ScreenUtils;
+import com.yalianxun.mingshi.utils.SharedPreferencesManager;
+import com.yalianxun.mingshi.utils.ToastUtils;
+
+import java.util.Objects;
 
 
 public class MainActivity extends BaseActivity {
@@ -54,14 +63,18 @@ public class MainActivity extends BaseActivity {
         if (launcher){
             //判断是否已经登陆
             boolean login = sharedPreferences.getBoolean("login",false);
-            if(!login){
+            boolean agree = sharedPreferences.getBoolean("agreeProtocol",false);
+            if(!agree){
+                findViewById(R.id.main_shadow).setVisibility(View.VISIBLE);
+                findViewById(R.id.protocol_ll).setVisibility(View.VISIBLE);
+            }else if(!login){
                 mHandler.sendEmptyMessageDelayed(1,500);
             }else {
                 //进入主界面
                 mHandler.sendEmptyMessageDelayed(3,500);
             }
         }else {
-            SharedPreferences.Editor editor=sharedPreferences.edit();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("firstLauncher",true);
             editor.apply();
             //动态申请权限
@@ -136,4 +149,22 @@ public class MainActivity extends BaseActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
     }
 
+    public void agreeProtocol(View view) {
+        SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("agreeProtocol",true);
+        editor.apply();
+        findViewById(R.id.main_shadow).setVisibility(View.GONE);
+        findViewById(R.id.protocol_ll).setVisibility(View.GONE);
+        mHandler.sendEmptyMessageDelayed(1,100);
+    }
+
+    public void disagreeProtocol(View view) {
+        System.exit(0);
+    }
+
+    public void showProtocol(View view) {
+
+        startActivity(new Intent(this,ProtocolActivity.class));
+    }
 }

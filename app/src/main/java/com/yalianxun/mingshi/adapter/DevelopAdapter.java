@@ -50,14 +50,14 @@ public class DevelopAdapter extends BaseAdapter {
         ViewHolder vh;
 
         if (view == null) {
-            item = LayoutInflater.from(mContext).inflate(R.layout.item_property_dev, viewGroup, false);
+            item = LayoutInflater.from(mContext).inflate(R.layout.item_property_home, viewGroup, false);
             vh = new ViewHolder();
             //找到文本框
-            vh.tv1 = item.findViewById(R.id.common_title);
-            vh.tv2 = item.findViewById(R.id.common_timestamp);
-            vh.tv3 = item.findViewById(R.id.common_click_count);
-            vh.tv4 = item.findViewById(R.id.info_content);
-//            vh.iv = item.findViewById(R.id.develop_iv);
+            vh.tv1 = item.findViewById(R.id.title);
+            vh.tv2 = item.findViewById(R.id.timestamp);
+            vh.tv3 = item.findViewById(R.id.browse_num);
+            vh.tv4 = item.findViewById(R.id.content);
+            vh.iv = item.findViewById(R.id.develop_iv);
 
             item.setTag(vh);
         } else {
@@ -69,16 +69,19 @@ public class DevelopAdapter extends BaseAdapter {
 
         //设置文本内容
         Notification notification = listViewData.get(position);
-        vh.tv1.setText(notification.getTitle());
-        vh.tv2.setText(notification.getTimestamp());
-        vh.tv4.setText(notification.getContent());
-        String str = "" + notification.getCountNum();
-        vh.tv3.setText(str);
-//        Glide.with(mContext)
-//                .load(notification.getImgUrl())
-//                .placeholder(R.drawable.placeholder_pic)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .into(vh.iv);
+        if(notification != null){
+            vh.tv1.setText(notification.getTitle());
+            vh.tv2.setText(notification.getTimestamp());
+            vh.tv4.setText(notification.getContent());
+            String str = "" + notification.getCountNum();
+            vh.tv3.setText(str);
+            Glide.with(mContext)
+                    .load(notification.getResID())
+                    .placeholder(R.drawable.placeholder_pic)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(vh.iv);
+        }
+
         return item;
     }
 
@@ -91,6 +94,6 @@ public class DevelopAdapter extends BaseAdapter {
         TextView tv2;
         TextView tv3;
         TextView tv4;
-//        ImageView iv;
+        ImageView iv;
     }
 }

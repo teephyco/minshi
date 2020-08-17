@@ -101,5 +101,8 @@
     <string name="open_door_shortcut">一键开门</string>
     <string name="mod_door_name_tips">请输入名称(10字以内)</string>
     <string name="first_page">首页</string>
+    <string name="user_protocol">《联家用户协议》</string>
+    <string name="modify_name">修改名称</string>
+    <string name="agree_mod">确定要修改吗？</string>
 
 </resources>

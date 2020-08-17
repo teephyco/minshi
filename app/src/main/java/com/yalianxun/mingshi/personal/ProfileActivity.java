@@ -46,7 +46,7 @@ public class ProfileActivity extends BaseActivity {
         TextView textView = findViewById(R.id.profile_user);
         textView.setText(SP_MANAGER.getValue("name",""));
         textView = findViewById(R.id.profile_telephone);
-        textView.setText(SP_MANAGER.getValue("mobile",""));
+        textView.setText(SP_MANAGER.getValue("mobile","").replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
         textView = findViewById(R.id.profile_community);
         textView.setText(SP_MANAGER.getValue("projectName",""));
         textView = findViewById(R.id.profile_room_num);

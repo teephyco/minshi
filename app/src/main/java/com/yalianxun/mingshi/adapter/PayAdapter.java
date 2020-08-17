@@ -74,7 +74,7 @@ public class PayAdapter extends BaseAdapter {
         vh.tv1.setText(pr.getDateMonth());
         vh.tv2.setText(pr.getDateYear());
         vh.tv3.setText(pr.getLocation());
-        String user = pr.getName() + " " + pr.getPhone();
+        String user = pr.getName() + " " + pr.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
         vh.tv4.setText(user);
         String str = "¥" + pr.getAmountTotal();
         vh.tv5.setText(str);

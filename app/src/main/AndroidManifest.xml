@@ -79,6 +79,9 @@
             android:name=".open.OpenDoorActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ProtocolActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".home.HomeActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />

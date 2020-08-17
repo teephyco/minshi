@@ -144,7 +144,7 @@ public class HttpUtils {
 
 
     public static void submitEvent(String content,OnNetResponseListener listener){
-        String url = HttpUtils.URL + "finger/event/createEventReport";
+        String url = HttpUtils.URL + "report/save";
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = new FormBody.Builder()
                 .add("projectId", "10010345712344")

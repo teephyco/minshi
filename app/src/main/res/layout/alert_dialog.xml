@@ -9,7 +9,7 @@
         android:id="@+id/alert_tv"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="修改名称"
+        android:text="@string/modify_name"
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -31,11 +31,12 @@
         android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
         android:textColor="@color/black_color"
-        android:text="确定要修改吗？"
+        android:text="@string/agree_mod"
         android:gravity="center"
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
     <LinearLayout
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
