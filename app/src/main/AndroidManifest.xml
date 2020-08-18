@@ -22,7 +22,6 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <activity android:name=".home.LifeInfoDetailActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TestActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".home.DetailActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".home.CommonDetailActivity"

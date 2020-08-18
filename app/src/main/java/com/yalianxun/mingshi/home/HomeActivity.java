@@ -1,9 +1,7 @@
 package com.yalianxun.mingshi.home;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +12,6 @@ import android.widget.TextView;
 
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
-import com.yalianxun.mingshi.TestActivity;
 import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.open.OpenDoorActivity;
 import com.yalianxun.mingshi.personal.PersonalActivity;
@@ -96,7 +93,7 @@ public class HomeActivity extends BaseActivity {
         }else if(tag.contains("life")){
             intent = new Intent(this, LifeInfoActivity.class);
         }else if(tag.contains("document")){
-            intent = new Intent(this, TestActivity.class);
+            intent = new Intent(this, PropertyDocumentActivity.class);
         }
         intent.putExtra("userInfo",userInfo);
         startActivity(intent);

@@ -45,12 +45,9 @@ public class LoginActivity extends BaseActivity {
         phoneET.addTextChangedListener(new YLXTextWatcher(iv,R.drawable.ic_head_default,R.drawable.ic_head_highlight));
         iv = findViewById(R.id.pw_iv);
         passwordET.addTextChangedListener(new YLXTextWatcher(iv,R.drawable.ic_lock_default,R.drawable.ic_lock_highlight));
-//        ImageView imageView = findViewById(R.id.background_head);
-//        imageView.setImageResource(R.drawable.background_head);
     }
     public void forgetPassword(View view) {
         startActivity(new Intent(this,ForgetPasswordActivity.class));
-//        startActivity(new Intent(this,TestActivity.class));
     }
 
     public void goHome(View view) {

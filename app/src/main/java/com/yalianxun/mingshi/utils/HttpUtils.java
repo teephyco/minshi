@@ -24,7 +24,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpUtils {
-    static public String URL = "http://192.168.0.124:8083/api/";
+    static public String URL = "http://192.168.0.111:8083/api/";
 //    http://124.71.113.203:8000/app/login
 
     //判断手机号格式是否正确
@@ -84,7 +84,6 @@ public class HttpUtils {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.d("http", "onFailure: " + e.getMessage());
-//                String str = e.getMessage();
                 listener.onNetResponseError("网络异常");
             }
 
@@ -99,7 +98,7 @@ public class HttpUtils {
         });
     }
 
-    public static void uploadPicture(String filePath,OnNetResponseListener listener){
+    public static void uploadPicture(String filePath,String openId,OnNetResponseListener listener){
         String url = HttpUtils.URL + "common/file/uploadFileToOss";
         OkHttpClient okHttpClient = new OkHttpClient();
 //        Log.d("http","path :" + filePath);
@@ -110,6 +109,7 @@ public class HttpUtils {
                 .addFormDataPart("file", file.getName(),RequestBody.create(MediaType.parse("application/octet-stream"), file))
                 .build();
         Request request = new Request.Builder()
+                .addHeader("openId",openId)
                 .url(url)
                 .post(requestBody)
                 .build();
@@ -131,6 +131,8 @@ public class HttpUtils {
                         JSONObject jsonObjectALL = new JSONObject(response.body().string());
                         if(jsonObjectALL.optString("code","").equals("200"))
                             URL = jsonObjectALL.optString("data","");
+                        else
+                            URL = "数据异常";
                     } catch (JSONException e) {
                         e.printStackTrace();
                         URL = "数据异常";
@@ -143,20 +145,19 @@ public class HttpUtils {
     }
 
 
-    public static void submitEvent(String content,OnNetResponseListener listener){
+    public static void submitEvent(String content,String openId,OnNetResponseListener listener){
         String url = HttpUtils.URL + "report/save";
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = new FormBody.Builder()
                 .add("projectId", "10010345712344")
-                .add("location", "GD")
                 .add("houseNum", "1001")
+                .add("title","xixi")
                 .add("content", content)
-                .add("picUrl","http://pic1.win4000.com/wallpaper/2020-04-13/5e93d620d04a6.jpg")
-                .add("phone", "13923745307")
-                .add("reporterName", "xph")
-                .add("proprietorName", "xy")
+                .add("status","1")
+                .add("imageOne","http://pic1.win4000.com/wallpaper/2020-04-13/5e93d620d04a6.jpg")
                 .build();
         Request request = new Request.Builder()
+                .addHeader("openId",openId)
                 .url(url)
                 .post(requestBody)
                 .build();
@@ -176,6 +177,9 @@ public class HttpUtils {
                         JSONObject jsonObjectALL = new JSONObject(response.body().string());
                         if(jsonObjectALL.optString("code","").equals("200"))
                             listener.onNetResponseError("报事成功");
+                        else {
+                            listener.onNetResponseError("报事失败");
+                        }
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
                         listener.onNetResponseError("网络异常");
@@ -240,6 +244,32 @@ public class HttpUtils {
                 .add("yearofmonth",date)
                 .build();
         String url = URL + "finger/fee/getMonthFeeItemList";
+        Request request = new Request.Builder()
+                .addHeader("openId",openId)
+                .url(url)
+                .post(requestBody)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback(){
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.d("http", "onFailure: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if(response.body() != null)
+                    Log.d("http", "success: " + response.body().string());
+            }
+        });
+    }
+
+    public static void getDocumentList(String projectID,String openId,OnNetResponseListener listener){
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("projectId", projectID)
+                .build();
+        String url = URL + "user/projectExtra";
         Request request = new Request.Builder()
                 .addHeader("openId",openId)
                 .url(url)

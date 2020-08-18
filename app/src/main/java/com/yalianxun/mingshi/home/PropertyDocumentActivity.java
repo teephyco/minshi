@@ -11,6 +11,8 @@ import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.DownloadImageAdapter;
 import com.yalianxun.mingshi.beans.ImageInfo;
+import com.yalianxun.mingshi.beans.UserInfo;
+import com.yalianxun.mingshi.utils.HttpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,19 @@ public class PropertyDocumentActivity extends BaseActivity {
         changStatusIconColor(true);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.property_file);
+        UserInfo user = getIntent().getParcelableExtra("userInfo");
+        if (user != null)
+        HttpUtils.getDocumentList(user.getProjectId(), user.getUserId(), new HttpUtils.OnNetResponseListener() {
+            @Override
+            public void onNetResponseError(String msg) {
+
+            }
+
+            @Override
+            public void onNetResponseSuccess(String string) {
+
+            }
+        });
         List<ImageInfo> imageInfoList = new ArrayList<>();
 
         for(int i = 0; i<pictures.length; i++){

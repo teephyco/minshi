@@ -31,10 +31,12 @@ import com.luck.picture.lib.tools.ScreenUtils;
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.GridImageAdapter;
+import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.utils.FullyGridLayoutManager;
 import com.yalianxun.mingshi.utils.GlideCacheEngine;
 import com.yalianxun.mingshi.utils.GlideEngine;
 import com.yalianxun.mingshi.utils.HttpUtils;
+import com.yalianxun.mingshi.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -56,6 +58,7 @@ public class ReportEventActivity extends BaseActivity {
     private LinearLayout mLinearLayout;
     private ArrayList<String> pictureURL = new ArrayList<String>();
     private TextView tempTv;
+    private UserInfo userInfo;
     private String filePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,7 @@ public class ReportEventActivity extends BaseActivity {
         setContentView(R.layout.activity_report);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.my_question);
+        userInfo = getIntent().getParcelableExtra("userInfo");
         initEditTextAndTextView(findViewById(R.id.et),findViewById(R.id.change_tv));
         RecyclerView mRecyclerView = findViewById(R.id.recycler);
         FullyGridLayoutManager manager = new FullyGridLayoutManager(this,
@@ -77,7 +81,7 @@ public class ReportEventActivity extends BaseActivity {
         if (savedInstanceState != null && savedInstanceState.getParcelableArrayList("selectorList") != null) {
             mAdapter.setList(savedInstanceState.getParcelableArrayList("selectorList"));
         }
-        mAdapter.setSelectMax(9);
+        mAdapter.setSelectMax(3);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -138,7 +142,7 @@ public class ReportEventActivity extends BaseActivity {
 
                     .loadCacheResourcesCallback(GlideCacheEngine.createCacheEngine())// 获取图片资源缓存，主要是解决华为10部分机型在拷贝文件过多时会出现卡的问题，这里可以判断只在会出现一直转圈问题机型上使用
 
-                    .maxSelectNum(9)// 最大图片选择数量
+                    .maxSelectNum(3)// 最大图片选择数量
 
                     .minSelectNum(1)// 最小选择数量
 
@@ -204,7 +208,7 @@ public class ReportEventActivity extends BaseActivity {
     public void commit(View view) {
         //处理提交事件
         if(tempTv == null){
-            Toast.makeText(this, "未选择服务类别，请选择，谢谢！" , Toast.LENGTH_SHORT).show();
+            ToastUtils.showTextToast(this, "未选择服务类别，请选择，谢谢！");
             return;
         }
 
@@ -221,7 +225,7 @@ public class ReportEventActivity extends BaseActivity {
                     filePath = media.getCompressPath();
                 else
                     filePath = media.getRealPath();
-                HttpUtils.uploadPicture(filePath, new HttpUtils.OnNetResponseListener() {
+                HttpUtils.uploadPicture(filePath, userInfo.getUserId(),new HttpUtils.OnNetResponseListener() {
                     @Override
                     public void onNetResponseError(String msg) {
                         runOnUiThread(()-> {
@@ -257,7 +261,8 @@ public class ReportEventActivity extends BaseActivity {
     }
 
     private void submitMyEvent(){
-        HttpUtils.submitEvent(((EditText) findViewById(R.id.et)).getText().toString(), new HttpUtils.OnNetResponseListener() {
+        pictureURL.size();
+        HttpUtils.submitEvent(((EditText) findViewById(R.id.et)).getText().toString(), userInfo.getUserId(),new HttpUtils.OnNetResponseListener() {
             @Override
             public void onNetResponseError(String msg) {
                 runOnUiThread(()-> {

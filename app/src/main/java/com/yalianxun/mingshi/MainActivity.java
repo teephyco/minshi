@@ -63,26 +63,20 @@ public class MainActivity extends BaseActivity {
         if (launcher){
             //判断是否已经登陆
             boolean login = sharedPreferences.getBoolean("login",false);
-            boolean agree = sharedPreferences.getBoolean("agreeProtocol",false);
-            if(!agree){
-                findViewById(R.id.main_shadow).setVisibility(View.VISIBLE);
-                findViewById(R.id.protocol_ll).setVisibility(View.VISIBLE);
-            }else if(!login){
+            if(!login){
                 mHandler.sendEmptyMessageDelayed(1,500);
             }else {
                 //进入主界面
                 mHandler.sendEmptyMessageDelayed(3,500);
             }
         }else {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("firstLauncher",true);
-            editor.apply();
-            //动态申请权限
-            final String[] permissionsGroup=new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.CALL_PHONE,
-                    Manifest.permission.CAMERA};
-            requestDangerousPermissions(permissionsGroup,500);
+            boolean agree = sharedPreferences.getBoolean("agreeProtocol",false);
+            if(!agree){
+                findViewById(R.id.main_shadow).setVisibility(View.VISIBLE);
+                findViewById(R.id.protocol_ll).setVisibility(View.VISIBLE);
+            }
+
+
         }
     }
     /**
@@ -153,10 +147,17 @@ public class MainActivity extends BaseActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("agreeProtocol",true);
+        editor.putBoolean("firstLauncher",true);
         editor.apply();
         findViewById(R.id.main_shadow).setVisibility(View.GONE);
         findViewById(R.id.protocol_ll).setVisibility(View.GONE);
-        mHandler.sendEmptyMessageDelayed(1,100);
+//        mHandler.sendEmptyMessageDelayed(1,100);
+        //动态申请权限
+        final String[] permissionsGroup=new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.CAMERA};
+        requestDangerousPermissions(permissionsGroup,500);
     }
 
     public void disagreeProtocol(View view) {

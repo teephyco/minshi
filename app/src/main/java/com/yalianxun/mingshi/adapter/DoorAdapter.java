@@ -74,23 +74,20 @@ public class DoorAdapter extends BaseAdapter {
                 vh.modNameBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(mContext,"",Toast.LENGTH_SHORT).show();
-                        vh.editText.setVisibility(View.VISIBLE);
-                        vh.editText.requestFocus();
-//                        @SuppressLint("InflateParams") View alertView = LayoutInflater.from(mContext).inflate(R.layout.alert_dialog,null,false);
-//                        TextView btn_agree = alertView.findViewById(R.id.alert_agree);
-//                        TextView btn_cancel = alertView.findViewById(R.id.alert_cancel);
-//                        EditText et = alertView.findViewById(R.id.alert_et);
-//                        final AlertDialog dialog = new AlertDialog.Builder(mContext).setView(alertView).create();
-//
-//                        btn_agree.setOnClickListener(v12 -> {
-//                            if(!et.getText().toString().equals("")){
-//                                vh.doorName.setText(et.getText().toString());
-//                            }
-//                            dialog.dismiss();
-//                        });
-//                        btn_cancel.setOnClickListener(v1 -> dialog.dismiss());
-//                        dialog.show();
+                        @SuppressLint("InflateParams") View alertView = LayoutInflater.from(mContext).inflate(R.layout.alert_dialog,null,false);
+                        TextView btn_agree = alertView.findViewById(R.id.alert_agree);
+                        TextView btn_cancel = alertView.findViewById(R.id.alert_cancel);
+                        EditText et = alertView.findViewById(R.id.alert_et);
+                        final AlertDialog dialog = new AlertDialog.Builder(mContext).setView(alertView).create();
+
+                        btn_agree.setOnClickListener(v12 -> {
+                            if(!et.getText().toString().equals("")){
+                                vh.doorName.setText(et.getText().toString());
+                            }
+                            dialog.dismiss();
+                        });
+                        btn_cancel.setOnClickListener(v1 -> dialog.dismiss());
+                        dialog.show();
                     }
                 });
             }else{
@@ -99,20 +96,6 @@ public class DoorAdapter extends BaseAdapter {
                 vh.doorStatus.setImageResource(R.drawable.ic_door_offline);
             }
         }
-        vh.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                Log.i("xph","hasFocus : " + hasFocus + " @@@@ " + vh.editText);
-                if(hasFocus){
-                    vh.doorName.setVisibility(View.INVISIBLE);
-                    vh.modNameBtn.setVisibility(View.INVISIBLE);
-                }else {
-                    vh.doorName.setVisibility(View.VISIBLE);
-                    vh.modNameBtn.setVisibility(View.VISIBLE);
-//                    vh.editText.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
         return item;
     }
 
