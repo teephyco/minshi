@@ -1,6 +1,7 @@
 package com.yalianxun.mingshi.home;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +10,19 @@ import android.widget.TextView;
 
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
+import com.yalianxun.mingshi.beans.Event;
+import com.yalianxun.mingshi.beans.FeeBean;
 import com.yalianxun.mingshi.beans.MonthFee;
 import com.yalianxun.mingshi.beans.PayRecord;
 import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.utils.HttpUtils;
+import com.yalianxun.mingshi.utils.ToastUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DetailPayActivity extends BaseActivity {
@@ -57,11 +67,6 @@ public class DetailPayActivity extends BaseActivity {
                 tv3.setTextColor(Color.parseColor("#1677ff"));
                 tv4.setTextColor(Color.parseColor("#ff3100"));
             }
-            ((TextView)findViewById(R.id.area_property)).setText(pr.getArrears());
-            ((TextView)findViewById(R.id.area_repair)).setText(pr.getArrears());
-            setTextViewValue(findViewById(R.id.electricity_charge),pr.getArrears());
-            setTextViewValue(findViewById(R.id.water_charge),pr.getArrears());
-            setTextViewValue(findViewById(R.id.property_charge),pr.getArrears());
             setTextViewValue(findViewById(R.id.total_fee),pr.getAmountTotal());
         }
         UserInfo user = getIntent().getParcelableExtra("userInfo");
@@ -69,17 +74,23 @@ public class DetailPayActivity extends BaseActivity {
             HttpUtils.getMonthFeeDetail(user.getProjectId(), user.getHouseNum(), date, user.getUserId(), new HttpUtils.OnNetResponseListener() {
                 @Override
                 public void onNetResponseError(String msg) {
-
+                    runOnUiThread(()-> {
+                        ToastUtils.showTextToast(getContext(),msg);
+//                        findViewById(R.id.shadow_fl).setVisibility(View.GONE);
+                    });
                 }
 
                 @Override
                 public void onNetResponseSuccess(String string) {
-
+                    runOnUiThread(()-> {
+                        loadDetailData(string);
+                    });
                 }
             });
 
 
     }
+
     public void goBack(View view) {
         finish();
     }
@@ -87,5 +98,60 @@ public class DetailPayActivity extends BaseActivity {
     public void setTextViewValue(TextView tv,String str){
         str += "元";
         tv.setText(str);
+    }
+
+    private Context getContext(){
+        return this;
+    }
+
+    private void loadDetailData(String value){
+        try {
+            List<FeeBean> allData = new ArrayList<>();
+            JSONObject jsonObjectALL = new JSONObject(value);
+            JSONArray jsonArray = jsonObjectALL.getJSONArray("dataList");
+            for (int i = 0; i < jsonArray.length(); i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                FeeBean feeBean = new FeeBean();
+                feeBean.setFeeTypeName(jsonObject.optString("feeTypeName",""));
+                feeBean.setTotalFee(jsonObject.optString("totalFee","0"));
+                feeBean.setUsageAmount(jsonObject.optString("usageAmount","0"));
+                feeBean.setUnitPrice(jsonObject.optString("unitPrice","0"));
+                feeBean.setStatus(jsonObject.optString("status","1"));
+                allData.add(feeBean);
+            }
+
+            refreshView(allData);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void refreshView(List<FeeBean> data){
+        for (FeeBean feeBean : data) {
+            if (feeBean.getFeeTypeName().contains("电费")){
+                ((TextView)findViewById(R.id.electricity_usage_amount)).setText(feeBean.getUsageAmount());
+                setTextViewValue(findViewById(R.id.electricity_charge),feeBean.getTotalFee());
+                String unitPrice = feeBean.getUnitPrice() + "元/度";
+                ((TextView)findViewById(R.id.electricity_unit_price)).setText(unitPrice);
+            }
+            if (feeBean.getFeeTypeName().contains("水费")){
+                ((TextView)findViewById(R.id.water_usage_amount)).setText(feeBean.getUsageAmount());
+                setTextViewValue(findViewById(R.id.water_charge),feeBean.getTotalFee());
+                String unitPrice = feeBean.getUnitPrice() + "元/立方";
+                ((TextView)findViewById(R.id.water_unit_price)).setText(unitPrice);
+            }
+            if (feeBean.getFeeTypeName().contains("物业管理费")){
+                ((TextView)findViewById(R.id.area_property)).setText(feeBean.getUsageAmount());
+                setTextViewValue(findViewById(R.id.property_charge),feeBean.getTotalFee());
+                String unitPrice = feeBean.getUnitPrice() + "元/平方";
+                ((TextView)findViewById(R.id.property_unit_price)).setText(unitPrice);
+            }
+            if (feeBean.getFeeTypeName().contains("本体维修基金")){
+                ((TextView)findViewById(R.id.area_repair)).setText(feeBean.getUsageAmount());
+                setTextViewValue(findViewById(R.id.repair_total_fee),feeBean.getTotalFee());
+                String unitPrice = feeBean.getUnitPrice() + "元/平方";
+                ((TextView)findViewById(R.id.repair_unit_price)).setText(unitPrice);
+            }
+        }
     }
 }

@@ -324,12 +324,26 @@ public class HttpUtils {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.d("http", "onFailure: " + e.getMessage());
+                listener.onNetResponseError("加载详情失败");
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if(response.body() != null)
-                    Log.d("http", "success: " + response.body().string());
+                if(response.body() != null){
+                    try {
+                        String str = response.body().string();
+                        JSONObject jsonObjectALL = new JSONObject(str);
+                        if(jsonObjectALL.optString("code","").equals("200")){
+                            listener.onNetResponseSuccess(str);
+                        }else {
+                            listener.onNetResponseError("加载详情失败");
+                        }
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        listener.onNetResponseError("加载详情失败");
+                    }
+                }
             }
         });
     }

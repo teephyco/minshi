@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.beans.MonthFee;
-import com.yalianxun.mingshi.beans.PayRecord;
 
 import java.util.List;
 

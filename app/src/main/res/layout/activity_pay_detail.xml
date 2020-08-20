@@ -218,21 +218,24 @@
                     android:layout_height="match_parent"/>
 
                 <TextView
+                    android:id="@+id/water_unit_price"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="5元/立方"
+                    android:text="@string/zero"
                     android:textSize="@dimen/font_formal" />
 
                 <TextView
+                    android:id="@+id/water_usage_amount"
                     android:layout_weight="1"
-                    android:text="15"
+                    android:text="@string/zero"
                     android:gravity="center_horizontal"
                     android:textSize="@dimen/font_formal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
                 <TextView
                     android:layout_weight="1"
+                    android:text="@string/zero"
                     android:id="@+id/water_charge"
                     android:gravity="center_horizontal"
                     android:textSize="@dimen/font_formal"
@@ -251,22 +254,25 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:id="@+id/electricity_unit_price"
                     android:layout_weight="1"
-                    android:text="2元/度"
+                    android:text="@string/zero"
                     android:textSize="@dimen/font_formal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
 
                 <TextView
+                    android:id="@+id/electricity_usage_amount"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:text="40"
+                    android:text="@string/zero"
                     android:textSize="@dimen/font_formal" />
                 <TextView
                     android:id="@+id/electricity_charge"
                     android:layout_weight="1"
+                    android:text="@string/zero"
                     android:gravity="center_horizontal"
                     android:textSize="@dimen/font_formal"
                     android:layout_width="0dp"
@@ -284,8 +290,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:id="@+id/property_unit_price"
                     android:layout_weight="1"
-                    android:text="3.5元/平方"
+                    android:text="@string/zero"
                     android:textSize="@dimen/font_formal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
@@ -294,6 +301,7 @@
                     android:id="@+id/area_property"
                     android:gravity="center_horizontal"
                     android:textSize="@dimen/font_formal"
+                    android:text="@string/zero"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
                 <TextView
@@ -302,6 +310,7 @@
                     android:gravity="center_horizontal"
                     android:textSize="@dimen/font_formal"
                     android:layout_width="0dp"
+                    android:text="@string/zero"
                     android:layout_height="match_parent"/>
             </LinearLayout>
             <LinearLayout
@@ -316,8 +325,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:id="@+id/repair_unit_price"
                     android:layout_weight="1"
-                    android:text="0.25元/平方"
+                    android:text="@string/zero"
                     android:textSize="@dimen/font_formal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
@@ -326,11 +336,13 @@
                     android:id="@+id/area_repair"
                     android:gravity="center_horizontal"
                     android:textSize="@dimen/font_formal"
+                    android:text="@string/zero"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
                 <TextView
+                    android:id="@+id/repair_total_fee"
                     android:layout_weight="1"
-                    android:text="25元"
+                    android:text="@string/zero"
                     android:gravity="center_horizontal"
                     android:textSize="@dimen/font_formal"
                     android:layout_width="0dp"

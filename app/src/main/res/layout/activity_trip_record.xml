@@ -100,11 +100,19 @@
 
             </LinearLayout>
             <ListView
+                android:visibility="gone"
                 android:id="@+id/tr_lv"
                 android:divider="@null"
                 android:scrollbars="none"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+            <TextView
+                android:layout_marginTop="40dp"
+                android:text="暂时无法查询出入记录"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
 

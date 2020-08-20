@@ -74,16 +74,16 @@ public class TripRecordActivity extends BaseActivity {
     public void refreshView(String location,String date,String time){
 
         //从后台获取数据
-        TripRecord tr = new TripRecord("15:43:61","王刚","13622382338",0);
-        listViewData.add(tr);
-        tr = new TripRecord("16:43:61","王刚","13622382338",1);
-        listViewData.add(tr);
-        tr = new TripRecord("18:43:61","王刚","13622382338",0);
-        listViewData.add(tr);
-        tr = new TripRecord("21:43:61","王刚","13622382338",1);
-        listViewData.add(tr);
-        tr = new TripRecord("22:43:61","王刚","13622382338",0);
-        listViewData.add(tr);
+//        TripRecord tr = new TripRecord("15:43:61","王刚","13622382338",0);
+//        listViewData.add(tr);
+//        tr = new TripRecord("16:43:61","王刚","13622382338",1);
+//        listViewData.add(tr);
+//        tr = new TripRecord("18:43:61","王刚","13622382338",0);
+//        listViewData.add(tr);
+//        tr = new TripRecord("21:43:61","王刚","13622382338",1);
+//        listViewData.add(tr);
+//        tr = new TripRecord("22:43:61","王刚","13622382338",0);
+//        listViewData.add(tr);
 
     }
 

@@ -124,7 +124,7 @@ public class PaymentActivity extends BaseActivity {
 
     private void loadData(String response){
         if(response.contains("success")){
-            String currentLocation = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum().substring(4);
+            String currentLocation = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum();
             String userName = userInfo.getName();
             String mobile = userInfo.getPhone();
             list = JsonUtil.getJsonUtil().getMonthFeeList(response,currentLocation,userName,mobile);

@@ -3,7 +3,6 @@ package com.yalianxun.mingshi.utils;
 import android.util.Log;
 
 import com.yalianxun.mingshi.beans.MonthFee;
-import com.yalianxun.mingshi.beans.PayRecord;
 import com.yalianxun.mingshi.beans.UserInfo;
 
 import org.json.JSONArray;
