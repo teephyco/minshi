@@ -51,18 +51,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void goHome(View view) {
-//        Intent intent = new Intent(this, HomePageActivity.class);
-//        startActivity(intent);
-//        finish();
         if(!HttpUtils.checkPhoneNumber(phoneET.getText().toString())){
             if(phoneET.getText().toString().equals("")){
-                Toast.makeText(this,"请输入手机号",Toast.LENGTH_SHORT).show();
+                ToastUtils.showTextToast(this,"请输入手机号");
             }else {
-                Toast.makeText(this,"手机号码错误",Toast.LENGTH_SHORT).show();
+                ToastUtils.showTextToast(this,"手机号码错误");
             }
         }else {
             if(passwordET.getText().toString().equals("")){
-                Toast.makeText(this,"密码不能为空",Toast.LENGTH_SHORT).show();
+                ToastUtils.showTextToast(this,"密码不能为空");
                 return;
             }
             findViewById(R.id.background).setVisibility(View.VISIBLE);
@@ -86,9 +83,9 @@ public class LoginActivity extends BaseActivity {
     private void login(@NotNull String response) {
         showBackground(response);
         if(response.contains("用户密码不正确")){
-            Toast.makeText(this,"用户密码不正确",Toast.LENGTH_SHORT).show();
+            ToastUtils.showTextToast(this,"用户密码不正确");
         }else if(response.contains("不存在")){
-            Toast.makeText(this,"用户不存在",Toast.LENGTH_SHORT).show();
+            ToastUtils.showTextToast(this,"用户不存在");
         }else if(response.contains("success")){
             SharedPreferencesManager model = new SharedPreferencesManager(this,"YLX");
             model.saveLoginData(response,phoneET.getText().toString(),passwordET.getText().toString());

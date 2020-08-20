@@ -11,6 +11,64 @@ public class Event implements Parcelable {
     private String currentStatus;// 家庭维修 公区报修 投诉建议
     private String content;
     private String startTime;
+    private String imageOne;
+    private String imageTwo;
+    private String imageThree;
+    private String feedback;
+
+    public Event(){
+
+    }
+
+    public Event(String timeStamp, int status, String currentStatus, String content, String startTime, String imageOne, String imageTwo, String imageThree, String feedback, String endTime) {
+        this.timeStamp = timeStamp;
+        this.status = status;
+        this.currentStatus = currentStatus;
+        this.content = content;
+        this.startTime = startTime;
+        this.imageOne = imageOne;
+        this.imageTwo = imageTwo;
+        this.imageThree = imageThree;
+        this.feedback = feedback;
+        this.endTime = endTime;
+    }
+
+    public static Creator<Event> getCREATOR() {
+        return CREATOR;
+    }
+
+    public String getImageOne() {
+        return imageOne;
+    }
+
+    public void setImageOne(String imageOne) {
+        this.imageOne = imageOne;
+    }
+
+    public String getImageTwo() {
+        return imageTwo;
+    }
+
+    public void setImageTwo(String imageTwo) {
+        this.imageTwo = imageTwo;
+    }
+
+    public String getImageThree() {
+        return imageThree;
+    }
+
+    public void setImageThree(String imageThree) {
+        this.imageThree = imageThree;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
     private String endTime;
 
     public String getContent() {
@@ -92,6 +150,10 @@ public class Event implements Parcelable {
         dest.writeString(this.endTime);
         dest.writeInt(this.pictureNum);
         dest.writeInt(this.status);
+        dest.writeString(this.imageOne);
+        dest.writeString(this.imageTwo);
+        dest.writeString(this.imageThree);
+        dest.writeString(this.feedback);
     }
     private Event(Parcel in){
         this.timeStamp = in.readString();
@@ -101,7 +163,10 @@ public class Event implements Parcelable {
         this.endTime = in.readString();
         this.pictureNum = in.readInt();
         this.status = in.readInt();
-
+        this.imageOne = in.readString();
+        this.imageTwo = in.readString();
+        this.imageThree = in.readString();
+        this.feedback = in.readString();
     }
     public static final Creator<Event> CREATOR = new Creator<Event>() {
         @Override

@@ -33,6 +33,7 @@ public class ModifyPasswordActivity extends BaseActivity {
     private EditText et;
     private EditText et_old;
     private EditText et_confirm;
+    private String openId;
     private boolean hide = true;
     private boolean hide_confirm = true;
     @Override
@@ -59,7 +60,8 @@ public class ModifyPasswordActivity extends BaseActivity {
         imm.hideSoftInputFromWindow(this.getWindow().getDecorView().getWindowToken(), 0);
         SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
         String PASSWORD = sharedPreferences.getString("password","");
-        if(et_old.getText().toString().equals("1234567")){
+        openId = sharedPreferences.getString("userID","");
+        if(et_old.getText().toString().equals(PASSWORD)){
             if(et.getText().toString().equals("")){
                 showAlert("新密码不能为空");
             }else if(et.getText().toString().length()<6){
@@ -108,13 +110,16 @@ public class ModifyPasswordActivity extends BaseActivity {
         et.setSelection(et.getText().length());
     }
 
-    private void savePassword(){
-        Toast.makeText(ModifyPasswordActivity.this,"修改密码成功",Toast.LENGTH_SHORT).show();
-        SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor= sharedPreferences.edit();
-        editor.putString("password",et.getText().toString());
-        editor.apply();
-        finish();
+    private void savePassword(String value){
+        if(value.equals("修改失败")){
+            ToastUtils.showTextToast(ModifyPasswordActivity.this,"修改密码失败");
+        }else if(value.contains("登录已过期")){
+            ToastUtils.showTextToast(ModifyPasswordActivity.this,value);
+        } else {
+            ToastUtils.showTextToast(ModifyPasswordActivity.this,"修改密码成功");
+            SP_MANAGER.putValue("password",et.getText().toString());
+            finish();
+        }
     }
 
     private void modPassword(){
@@ -122,15 +127,16 @@ public class ModifyPasswordActivity extends BaseActivity {
         HttpUtils.updatePassword(
                 getSharedPreferences("YLX", Context.MODE_PRIVATE).getString("userID", ""),
                 et_old.getText().toString(), et.getText().toString(),
+                openId,
                 new HttpUtils.OnNetResponseListener() {
                     @Override
                     public void onNetResponseError(String msg) {
-                        runOnUiThread(()-> Toast.makeText(ModifyPasswordActivity.this,"修改密码失败",Toast.LENGTH_SHORT).show());
+                        runOnUiThread(()-> ToastUtils.showTextToast(ModifyPasswordActivity.this,"修改密码失败"));
                     }
 
                     @Override
                     public void onNetResponseSuccess(String string) {
-                        runOnUiThread(()->savePassword());
+                        runOnUiThread(()->savePassword(string));
                     }
                 }
         );

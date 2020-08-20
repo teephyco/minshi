@@ -62,7 +62,7 @@
                 <EditText
                     android:id="@+id/login_telephone_et"
                     android:textSize="18sp"
-                    android:text="15989765107"
+                    android:text="13537653004"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginTop="4dp"
@@ -99,7 +99,7 @@
                 <EditText
                     android:id="@+id/login_password_et"
                     android:textSize="18sp"
-                    android:text="765107"
+                    android:text="653004"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginTop="4dp"

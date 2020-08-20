@@ -1,6 +1,7 @@
 package com.yalianxun.mingshi.home;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class PaymentActivity extends BaseActivity {
     private TextView loadTv;
     private TextView unpaidChargeTV;
     private TextView accountBalanceTV;
+    private TextView total_unpaid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,7 @@ public class PaymentActivity extends BaseActivity {
         progressBar = findViewById(R.id.pay_progress);
         loadTv = findViewById(R.id.pay_load_state);
         unpaidChargeTV = findViewById(R.id.unpaidCharge);
+        total_unpaid = findViewById(R.id.total_unpaid_fee);
         accountBalanceTV = findViewById(R.id.accountBalance);
         userInfo = getIntent().getParcelableExtra("userInfo");
         postHttps("finger/fee/getBalanceAndNotPay",false);
@@ -100,6 +103,8 @@ public class PaymentActivity extends BaseActivity {
                     }else {
                         if(str.contains("success")){
                             runOnUiThread(() -> updateBalanceAndNotPay(str));
+                        }else {
+                            runOnUiThread(() -> showLoading());
                         }
                     }
                 }
@@ -161,6 +166,7 @@ public class PaymentActivity extends BaseActivity {
         }.start();
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateBalanceAndNotPay(String response){
         JSONObject jsonObjectALL;
         try {
@@ -177,6 +183,7 @@ public class PaymentActivity extends BaseActivity {
                 unpaidChargeTV.setText("0");
             }else {
                 unpaidChargeTV.setText(str);
+                total_unpaid.setText("合计：" + str);
             }
             postHttps("finger/fee/getMonthFeeSumList",true);
         } catch (JSONException e) {

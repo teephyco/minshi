@@ -81,10 +81,11 @@
                 android:layout_height="25dp"/>
             <TextView
                 android:id="@+id/report_location"
-                android:text="金港华庭13栋1103"
                 android:textColor="@color/black_color"
                 android:layout_marginStart="10dp"
                 android:gravity="center"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
@@ -310,8 +311,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <View
-            android:alpha="0.5"
-            android:background="@color/darkGray"
+            android:alpha="0.3"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@color/black_color"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <ProgressBar

@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.beans.Event;
 
@@ -86,7 +88,7 @@ public class EventAdapter extends BaseAdapter {
             vh.tv1.setText(pr.getContent());
             vh.tv3.setText(pr.getCurrentStatus());
             vh.tv3.setTextColor(Color.parseColor("#FF6200"));
-            vh.tv4.setText(pr.getTimeStamp());
+            vh.tv4.setText(pr.getStartTime());
             if(pr.getStatus() == 0){
                 vh.tv7.setText("待处理");
                 vh.tv7.setAlpha(1.0f);
@@ -103,7 +105,6 @@ public class EventAdapter extends BaseAdapter {
                 vh.ll3.setVisibility(View.GONE);
                 vh.tv3.setText("物业正在处理");
                 vh.tv3.setTextColor(Color.parseColor("#cdcdcd"));
-                vh.tv4.setText(pr.getStartTime());
                 vh.ll2.setVisibility(View.GONE);
             }else if(pr.getStatus() == 2){
                 vh.tv7.setText("已完成");
@@ -113,30 +114,14 @@ public class EventAdapter extends BaseAdapter {
                 vh.tv6.setText(pr.getEndTime());
                 vh.ll2.setVisibility(View.GONE);
             }
-            if (pr.getPictureNum() == 0){
+            if(pr.getImageOne().equals("")){
                 vh.ll.setVisibility(View.GONE);
             }else{
                 vh.ll.setVisibility(View.VISIBLE);
-                if(pr.getPictureNum() > 3){
-                    vh.tv2.setVisibility(View.VISIBLE);
-                    vh.iv3.setVisibility(View.VISIBLE);
-                    vh.iv2.setVisibility(View.VISIBLE);
-                    String str = " " + pr.getPictureNum();
-                    vh.tv2.setText(str);
-                }else {
-                    vh.tv2.setVisibility(View.GONE);
-                    vh.iv3.setVisibility(View.VISIBLE);
-                    vh.iv2.setVisibility(View.VISIBLE);
-                    if(pr.getPictureNum() <= 2){
-                        vh.iv3.setVisibility(View.GONE);
-                        if(pr.getPictureNum() <= 1){
-                            vh.iv2.setVisibility(View.GONE);
-                        }
-                    }
-                }
+                loadPicture(vh.iv1,pr.getImageOne());
+                loadPicture(vh.iv2,pr.getImageTwo());
+                loadPicture(vh.iv3,pr.getImageThree());
             }
-
-
         }
 
 
@@ -146,6 +131,19 @@ public class EventAdapter extends BaseAdapter {
     }
 
 
+    private void loadPicture(ImageView imageView,String url){
+        if(url.equals("")){
+            imageView.setVisibility(View.GONE);
+        }else {
+            imageView.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(url)
+                    .placeholder(R.drawable.placeholder_pic)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imageView);
+        }
+
+    }
     /**
      * 用于存放一个ItemView中的控件,由于这里只有两个控件,那么声明两个控件即可
      */

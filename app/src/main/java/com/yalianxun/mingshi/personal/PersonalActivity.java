@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yalianxun.mingshi.BaseActivity;
-import com.yalianxun.mingshi.LoginActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.open.FaceManagerActivity;
 import com.yalianxun.mingshi.open.TripRecordActivity;
@@ -66,13 +65,9 @@ public class PersonalActivity extends BaseActivity implements  View.OnTouchListe
 
 
     public void exit(View view) {
-//        SharedPreferences sharedPreferences = getSharedPreferences("YLX", Context.MODE_PRIVATE);
-////        SharedPreferences.Editor editor=sharedPreferences.edit();
-////        editor.putBoolean("login",false);
-////        editor.apply();
         SharedPreferencesManager model = new SharedPreferencesManager(this,"YLX");
         model.putValue("login",false);
-        startActivity(new Intent(this, LoginActivity.class));
+        setResult(1010);
         finish();
     }
 

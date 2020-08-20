@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="14dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -25,17 +25,16 @@
             android:layout_marginEnd="20dp"
             android:textSize="16sp"
             android:paddingStart="4dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
             android:paddingEnd="4dp"
-            android:text="已完成"
             android:background="@drawable/orange_bolder"
             android:textColor="@color/picture_color_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -57,7 +56,7 @@
             android:layout_height="18dp"/>
     </LinearLayout>
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="2dp"
         android:id="@+id/event_show_pic"
         android:orientation="horizontal"
         android:visibility="visible"
@@ -76,7 +75,7 @@
             <ImageView
                 android:id="@+id/event_pic1"
                 android:scaleType="centerCrop"
-                android:src="@drawable/backbround"
+                android:src="@drawable/placeholder_pic"
                 android:contentDescription="@string/my_picture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -91,7 +90,7 @@
             <ImageView
                 android:id="@+id/event_pic2"
                 android:scaleType="centerCrop"
-                android:src="@drawable/backbround"
+                android:src="@drawable/placeholder_pic"
                 android:contentDescription="@string/my_picture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -107,10 +106,11 @@
                 android:contentDescription="@string/my_picture"
                 android:id="@+id/event_pic3"
                 android:scaleType="centerCrop"
-                android:src="@drawable/backbround"
+                android:src="@drawable/placeholder_pic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <RelativeLayout
+                android:visibility="gone"
                 android:alpha="0.8"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="bottom"
@@ -155,7 +155,7 @@
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/event_end_layout"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="14dp"
         android:visibility="visible"
         android:orientation="horizontal"
         android:layout_width="match_parent"

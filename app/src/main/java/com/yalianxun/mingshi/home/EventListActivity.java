@@ -10,14 +10,17 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.EventAdapter;
 import com.yalianxun.mingshi.beans.Event;
+import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.utils.DateUtil;
 import com.yalianxun.mingshi.utils.HttpUtils;
+import com.yalianxun.mingshi.utils.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,67 +35,88 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class EventListActivity extends BaseActivity {
-    List<Event> unsettledData = new ArrayList<>();
-    List<Event> settledData = new ArrayList<>();
+    private List<Event> unsettledData = new ArrayList<>();
+    private List<Event> settledData = new ArrayList<>();
+    private List<Event> allData = new ArrayList<>();
+    private EventAdapter adapter;
     private TextView untreated_tv;
     private TextView finished_tv;
-    EventAdapter adapter;
-    ListView listView;
+    private ListView listView;
+    private UserInfo userInfo;
+    private RelativeLayout shadowRL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_event);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.event_list);
+        userInfo = getIntent().getParcelableExtra("userInfo");
         listView = findViewById(R.id.event_list_lv);
+        shadowRL = findViewById(R.id.shadow_rl);
 //        String brand = android.os.Build.BRAND;
 //        Log.d("xph","brand " + brand + " type " + Build.MODEL);
         initData();
         changStatusIconColor(true);
         finished_tv = findViewById(R.id.finished);
         untreated_tv = findViewById(R.id.untreated);
-        showListContent(untreated_tv,finished_tv,findViewById(R.id.event_type2), findViewById(R.id.event_type1),unsettledData);
     }
+
     private void initData() {
-        Event event = new Event(0,"2019-06-07 16:48:25",0,"公区报修",
-                "腾讯吐个槽进行产品评测,而腾讯吐个槽是一款专注于用户反馈的产品,前身是腾讯内部最常用的用户反馈产品",
-                "","");
-        unsettledData.add(event);
-        event = new Event(5,"2019-06-07 16:48:25",1,"公区报修",
-                "腾讯吐个槽进行产品评测,而腾讯吐个槽是一款专注于用户反馈的产品,前身是腾讯内部最常用的用户反馈产品",
-                "2019-06-12 16:48:25","");
-        unsettledData.add(event);
-        event = new Event(2,"2019-06-07 16:48:25",1,"家庭维修",
-                "腾讯吐个槽进行产品评测,而腾讯吐个槽是一款专注于用户反馈的产品,前身是腾讯内部最常用的用户反馈产品",
-                "2019-06-12 16:48:25","");
-        unsettledData.add(event);
-        for(int i = 0;i < 7; i++){
-            event = new Event(6,"2019-06-07 16:48:25",1,"家庭维修",
-                    "腾讯吐个槽进行产品评测,而腾讯吐个槽是一款专注于用户反馈的产品,前身是腾讯内部最常用的用户反馈产品",
-                    "2019-06-12 16:48:25","");
-            unsettledData.add(event);
-        }
-        for(int i = 0;i < 9; i++){
-            event = new Event(i,"2019-06-07 16:48:25",2,"家庭维修",
-                    "腾讯吐个槽进行产品评测,而腾讯吐个槽是一款专注于用户反馈的产品,前身是腾讯内部最常用的用户反馈产品",
-                    "2019-06-12 16:48:25","2019-07-12 15:48:25");
-            settledData.add(event);
-        }
-        //getHttps();
-        HttpUtils.getEventReportList("10010345712344", "1001", "13923745307", new HttpUtils.OnNetResponseListener() {
+        shadowRL.setVisibility(View.VISIBLE);
+        HttpUtils.getReportList(userInfo.getProjectId(),userInfo.getHouseNum(),"1","10",userInfo.getUserId(),new HttpUtils.OnNetResponseListener(){
             @Override
             public void onNetResponseError(String msg) {
-
+                runOnUiThread(()-> {
+                    ToastUtils.showTextToast(EventListActivity.this,msg);
+                    shadowRL.setVisibility(View.GONE);
+                });
             }
 
             @Override
             public void onNetResponseSuccess(String string) {
-
+                runOnUiThread(()-> updateData(string));
             }
         });
 
+    }
+
+    private void updateData(String value){
+        try {
+            JSONObject jsonObjectALL = new JSONObject(value);
+            JSONObject data = jsonObjectALL.optJSONObject("data");
+            assert data != null;
+            JSONArray jsonArray = data.getJSONArray("dataList");
+            for (int i = 0; i < jsonArray.length(); i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Event event = new Event();
+                event.setCurrentStatus(jsonObject.optString("title",""));
+                event.setContent(jsonObject.optString("content",""));
+                event.setImageOne(jsonObject.optString("imageOne",""));
+                event.setImageTwo(jsonObject.optString("imageTwo",""));
+                event.setImageThree(jsonObject.optString("imageThree",""));
+                event.setFeedback(jsonObject.optString("feedback",""));
+                long createTime = jsonObject.optLong("createTime", 0);
+                event.setStartTime(DateUtil.getTime(createTime,1));
+                long endTime = jsonObject.optLong("endTime", 0);
+                event.setEndTime(DateUtil.getTime(endTime,1));
+                String status = jsonObject.optString("status","0");
+                event.setStatus(Integer.parseInt(status));
+                allData.add(event);
+            }
+            for (Event e:allData) {
+                if(e.getStatus() == 1){
+                    unsettledData.add(e);
+                }else
+                    settledData.add(e);
+            }
+            shadowRL.setVisibility(View.GONE);
+            showListContent(untreated_tv,finished_tv,findViewById(R.id.event_type2), findViewById(R.id.event_type1),unsettledData);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
+
     public void goBack(View view) {
         finish();
     }
@@ -111,7 +135,7 @@ public class EventListActivity extends BaseActivity {
         tv2.setTextColor(Color.parseColor("#000000"));
         v1.setVisibility(View.INVISIBLE);
         v2.setVisibility(View.VISIBLE);
-        adapter = new EventAdapter(list,this);
+        EventAdapter adapter = new EventAdapter(list, this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, v, position, id) -> {
             Intent intent = new Intent(this,EventDetailActivity.class);

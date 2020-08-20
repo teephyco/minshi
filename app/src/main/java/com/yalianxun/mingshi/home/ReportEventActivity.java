@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,28 +37,20 @@ import com.yalianxun.mingshi.utils.GlideEngine;
 import com.yalianxun.mingshi.utils.HttpUtils;
 import com.yalianxun.mingshi.utils.ToastUtils;
 
-import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class ReportEventActivity extends BaseActivity {
 
     private GridImageAdapter mAdapter;
-    private LinearLayout mLinearLayout;
-    private ArrayList<String> pictureURL = new ArrayList<String>();
+    private ArrayList<String> pictureURL = new ArrayList<>();
     private TextView tempTv;
+    private String title;
     private UserInfo userInfo;
-    private String filePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +60,9 @@ public class ReportEventActivity extends BaseActivity {
         setContentView(R.layout.activity_report);
         TextView tv = findViewById(R.id.av_title);
         tv.setText(R.string.my_question);
+        TextView location = findViewById(R.id.report_location);
         userInfo = getIntent().getParcelableExtra("userInfo");
+        location.setText(SP_MANAGER.getValue("location",""));
         initEditTextAndTextView(findViewById(R.id.et),findViewById(R.id.change_tv));
         RecyclerView mRecyclerView = findViewById(R.id.recycler);
         FullyGridLayoutManager manager = new FullyGridLayoutManager(this,
@@ -94,6 +87,7 @@ public class ReportEventActivity extends BaseActivity {
             setTextViewStyle(R.drawable.bolder_unselected,"#000000");
         }
         tempTv = (TextView)view;
+        title = tempTv.getText().toString();
         setTextViewStyle(R.drawable.bolder_selected,"#1677ff");
     }
 
@@ -219,36 +213,7 @@ public class ReportEventActivity extends BaseActivity {
         findViewById(R.id.shadow_fl).setVisibility(View.VISIBLE);
         List<LocalMedia> list = mAdapter.getData();
         if(list.size()>0){
-            for(int i = 0;i < list.size();i++){
-                LocalMedia media = list.get(i);
-                if(media.getCompressPath()!=null)
-                    filePath = media.getCompressPath();
-                else
-                    filePath = media.getRealPath();
-                HttpUtils.uploadPicture(filePath, userInfo.getUserId(),new HttpUtils.OnNetResponseListener() {
-                    @Override
-                    public void onNetResponseError(String msg) {
-                        runOnUiThread(()-> {
-                            Toast.makeText(ReportEventActivity.this,msg,Toast.LENGTH_SHORT).show();
-                            findViewById(R.id.shadow_fl).setVisibility(View.GONE);
-                        });
-                    }
-                    @Override
-                    public void onNetResponseSuccess(String string) {
-                        if(string.contains("http")){
-                            pictureURL.add(string);
-                            if(pictureURL.size() == mAdapter.getData().size())
-                                runOnUiThread(()-> submitMyEvent());
-                        }else {
-                            runOnUiThread(()-> {
-                                Toast.makeText(ReportEventActivity.this,"网络异常",Toast.LENGTH_SHORT).show();
-                                findViewById(R.id.shadow_fl).setVisibility(View.GONE);
-                            });
-                        }
-
-                    }
-                });
-            }
+            uploadPicture(0);
         }else {
             submitMyEvent();
         }
@@ -257,16 +222,54 @@ public class ReportEventActivity extends BaseActivity {
     public void showHistory(View view) {
         //go to history
         Intent intent = new Intent(this,EventListActivity.class);
+        intent.putExtra("userInfo",userInfo);
         startActivity(intent);
     }
 
-    private void submitMyEvent(){
-        pictureURL.size();
-        HttpUtils.submitEvent(((EditText) findViewById(R.id.et)).getText().toString(), userInfo.getUserId(),new HttpUtils.OnNetResponseListener() {
+    private void uploadPicture(int index){
+        List<LocalMedia> list = mAdapter.getData();
+        LocalMedia media = list.get(index);
+
+        String filePath;
+        if(media.getCompressPath()!=null)
+            filePath = media.getCompressPath();
+        else
+            filePath = media.getRealPath();
+//        Log.d("http"," " + new File(filePath).length() / 1024);
+        int temp = index + 1;
+        HttpUtils.uploadPicture(filePath, userInfo.getUserId(),new HttpUtils.OnNetResponseListener() {
             @Override
             public void onNetResponseError(String msg) {
                 runOnUiThread(()-> {
-                    Toast.makeText(ReportEventActivity.this,msg,Toast.LENGTH_SHORT).show();
+                    ToastUtils.showTextToast(ReportEventActivity.this,msg);
+                    findViewById(R.id.shadow_fl).setVisibility(View.GONE);
+                });
+            }
+            @Override
+            public void onNetResponseSuccess(String string) {
+                if(string.contains("http")){
+                    pictureURL.add(string);
+                    if(pictureURL.size() == mAdapter.getData().size())
+                        runOnUiThread(()-> submitMyEvent());
+                    else
+                        runOnUiThread(()-> uploadPicture(temp));
+                }else {
+                    runOnUiThread(()-> {
+                        ToastUtils.showTextToast(ReportEventActivity.this,"网络异常");
+                        findViewById(R.id.shadow_fl).setVisibility(View.GONE);
+                    });
+                }
+
+            }
+        });
+    }
+
+    private void submitMyEvent(){
+        HttpUtils.submitEvent(((EditText) findViewById(R.id.et)).getText().toString(),title,userInfo,pictureURL,new HttpUtils.OnNetResponseListener() {
+            @Override
+            public void onNetResponseError(String msg) {
+                runOnUiThread(()-> {
+                    ToastUtils.showTextToast(ReportEventActivity.this,msg);
                     findViewById(R.id.shadow_fl).setVisibility(View.GONE);
                 });
             }
@@ -274,11 +277,12 @@ public class ReportEventActivity extends BaseActivity {
             @Override
             public void onNetResponseSuccess(String string) {
                 runOnUiThread(()-> {
-                    Toast.makeText(ReportEventActivity.this,string,Toast.LENGTH_SHORT).show();
+                    ToastUtils.showTextToast(ReportEventActivity.this,string);
                     findViewById(R.id.shadow_fl).setVisibility(View.GONE);
                 });
             }
         });
+        pictureURL.clear();
     }
 
 

@@ -13,6 +13,7 @@ public class UserInfo implements Parcelable {
     private String projectName;
     private String buildingName;
     private String houseType;
+    private String serviceTel;
 
     public UserInfo(String globalId, String userId, String name, String phone, String houseNum, String projectId, String projectName, String buildingName, String houseType) {
         this.globalId = globalId;
@@ -24,6 +25,27 @@ public class UserInfo implements Parcelable {
         this.projectName = projectName;
         this.buildingName = buildingName;
         this.houseType = houseType;
+    }
+
+    public UserInfo(String globalId, String userId, String name, String phone, String houseNum, String projectId, String projectName, String buildingName, String houseType, String serviceTel) {
+        this.globalId = globalId;
+        this.userId = userId;
+        this.name = name;
+        this.phone = phone;
+        this.houseNum = houseNum;
+        this.projectId = projectId;
+        this.projectName = projectName;
+        this.buildingName = buildingName;
+        this.houseType = houseType;
+        this.serviceTel = serviceTel;
+    }
+
+    public String getServiceTel() {
+        return serviceTel;
+    }
+
+    public void setServiceTel(String serviceTel) {
+        this.serviceTel = serviceTel;
     }
 
     public String getGlobalId() {
@@ -114,6 +136,7 @@ public class UserInfo implements Parcelable {
         dest.writeString(this.projectName);
         dest.writeString(this.buildingName);
         dest.writeString(this.houseType);
+        dest.writeString(this.serviceTel);
     }
     private UserInfo(Parcel in){
         this.globalId = in.readString();
@@ -125,7 +148,7 @@ public class UserInfo implements Parcelable {
         this.projectName = in.readString();
         this.buildingName = in.readString();
         this.houseType = in.readString();
-
+        this.serviceTel = in.readString();
     }
     public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
         @Override

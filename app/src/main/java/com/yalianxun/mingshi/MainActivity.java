@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity {
             //判断是否已经登陆
             boolean login = sharedPreferences.getBoolean("login",false);
             if(!login){
-                mHandler.sendEmptyMessageDelayed(1,500);
+                mHandler.sendEmptyMessageDelayed(2,500);
             }else {
                 //进入主界面
                 mHandler.sendEmptyMessageDelayed(3,500);

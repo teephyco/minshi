@@ -5,6 +5,8 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.yalianxun.mingshi.beans.UserInfo;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,6 +14,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -24,8 +27,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpUtils {
-    static public String URL = "http://192.168.0.111:8083/api/";
-//    http://124.71.113.203:8000/app/login
+    static public String URL = "https://szaucent.com/api/";
 
     //判断手机号格式是否正确
     public static boolean checkPhoneNumber(@NotNull String phone){
@@ -33,7 +35,7 @@ public class HttpUtils {
         return phone.matches(telRegex);
     }
 
-    public static void updatePassword(String userID, String oldPassword,String newPassword,OnNetResponseListener listener){
+    public static void updatePassword(String userID, String oldPassword,String newPassword,String openId,OnNetResponseListener listener){
         OkHttpClient okHttpClient = new OkHttpClient();
         String url = HttpUtils.URL + "finger/auth/updatePwdAfterLogin";
         RequestBody requestBody = new FormBody.Builder()
@@ -42,6 +44,7 @@ public class HttpUtils {
                 .add("newpassword", newPassword)
                 .build();
         Request request = new Request.Builder()
+                .addHeader("openId",openId)
                 .url(url)
                 .post(requestBody)
                 .build();
@@ -58,9 +61,21 @@ public class HttpUtils {
 
                 if(response.body() != null){
                     String string = response.body().string();
-                    if(string.contains("success")){
-                        listener.onNetResponseSuccess(string);
+                    try {
+                        JSONObject jsonObjectALL = new JSONObject(string);
+                        if(jsonObjectALL.optString("code","").equals("200"))
+                            listener.onNetResponseSuccess(string);
+                        else if(jsonObjectALL.optString("code","").equals("401")){
+                            listener.onNetResponseSuccess("登录已过期，请重新登录");
+                        }else {
+                            listener.onNetResponseSuccess("修改失败");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        listener.onNetResponseSuccess("修改失败");
                     }
+                }else {
+                    listener.onNetResponseError("修改失败");
                 }
             }
         });
@@ -101,9 +116,7 @@ public class HttpUtils {
     public static void uploadPicture(String filePath,String openId,OnNetResponseListener listener){
         String url = HttpUtils.URL + "common/file/uploadFileToOss";
         OkHttpClient okHttpClient = new OkHttpClient();
-//        Log.d("http","path :" + filePath);
         File file = new File(filePath);
-
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", file.getName(),RequestBody.create(MediaType.parse("application/octet-stream"), file))
@@ -124,13 +137,14 @@ public class HttpUtils {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if(response.body() != null){
-//                   Log.d("http", "onResponse: " + response.body().string());
                     String URL = "";
                     try {
                         //图片上传成功
                         JSONObject jsonObjectALL = new JSONObject(response.body().string());
                         if(jsonObjectALL.optString("code","").equals("200"))
                             URL = jsonObjectALL.optString("data","");
+                        else if(jsonObjectALL.optString("code","").equals("401"))
+                            URL = "登录已过期，请重新登录";
                         else
                             URL = "数据异常";
                     } catch (JSONException e) {
@@ -145,19 +159,23 @@ public class HttpUtils {
     }
 
 
-    public static void submitEvent(String content,String openId,OnNetResponseListener listener){
+    public static void submitEvent(String content, String title,UserInfo userInfo, ArrayList<String> list, OnNetResponseListener listener){
         String url = HttpUtils.URL + "report/save";
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = new FormBody.Builder()
-                .add("projectId", "10010345712344")
-                .add("houseNum", "1001")
-                .add("title","xixi")
+                .add("projectId", userInfo.getProjectId())
+                .add("houseNum", userInfo.getHouseNum())
+                .add("title",title)
                 .add("content", content)
                 .add("status","1")
-                .add("imageOne","http://pic1.win4000.com/wallpaper/2020-04-13/5e93d620d04a6.jpg")
+                .add("imageOne",list.size()>0?list.get(0):"")
+                .add("imageTwo",list.size()>1?list.get(1):"")
+                .add("imageThree",list.size()>2?list.get(2):"")
+                .add("creatorId",userInfo.getName())
                 .build();
+
         Request request = new Request.Builder()
-                .addHeader("openId",openId)
+                .addHeader("openId",userInfo.getUserId())
                 .url(url)
                 .post(requestBody)
                 .build();
@@ -176,8 +194,10 @@ public class HttpUtils {
                     try {
                         JSONObject jsonObjectALL = new JSONObject(response.body().string());
                         if(jsonObjectALL.optString("code","").equals("200"))
-                            listener.onNetResponseError("报事成功");
-                        else {
+                            listener.onNetResponseSuccess("报事成功");
+                        else if(jsonObjectALL.optString("code","").equals("401")){
+                            listener.onNetResponseError("登录已过期，请重新登录");
+                        }else {
                             listener.onNetResponseError("报事失败");
                         }
                     } catch (JSONException | IOException e) {
@@ -191,6 +211,54 @@ public class HttpUtils {
         });
     }
 
+    public static void getReportList(String projectId,String houseNum,String page, String rows,String openId,OnNetResponseListener listener){
+        String url = HttpUtils.URL + "report/list";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("projectId", projectId)
+                .add("houseNum", houseNum)
+                .add("page", page)
+                .add("rows", rows)
+                .build();
+
+        Request request = new Request.Builder()
+                .addHeader("openId",openId)
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.d("http", "onFailure: " + e.getMessage());
+                listener.onNetResponseError("获取列表失败");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+
+                if(response.body() != null) {
+                    try {
+                        String str = response.body().string();
+                        JSONObject jsonObjectALL = new JSONObject(str);
+                        if(jsonObjectALL.optString("code","").equals("200")){
+                            listener.onNetResponseSuccess(str);
+                        }else if(jsonObjectALL.optString("code","").equals("401")){
+                            listener.onNetResponseError("登录已过期，请重新登录");
+                        }else {
+                            listener.onNetResponseError("获取列表失败");
+                        }
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        listener.onNetResponseError("获取列表失败");
+                    }
+                }
+
+            }
+        });
+
+    }
     public static void getEventReportList(String projectId, String houseNum,String phone,OnNetResponseListener listener){
         String url = URL + "finger/event/getEventReportList?projectId=" + projectId +"&houseNum=" + houseNum + "&phone=" + phone;
         OkHttpClient okHttpClient=new OkHttpClient();
@@ -209,7 +277,9 @@ public class HttpUtils {
                         try {
                             String str = response.body().string();
                             JSONObject jsonObjectALL = new JSONObject(str);
-                            JSONArray jsonArray = jsonObjectALL.getJSONArray("dataList");
+                            JSONObject data = jsonObjectALL.optJSONObject("data");
+                            assert data != null;
+                            JSONArray jsonArray = data.getJSONArray("dataList");
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 // JSON数组里面的具体-JSON对象
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -284,8 +354,19 @@ public class HttpUtils {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if(response.body() != null)
-                    Log.d("http", "success: " + response.body().string());
+                if(response.body() != null){
+                    try {
+                        JSONObject jsonObjectALL = new JSONObject(response.body().string());
+                        if(jsonObjectALL.optString("code","").equals("200"))
+                            listener.onNetResponseError("报事成功");
+                        else {
+                            listener.onNetResponseError("报事失败");
+                        }
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                        listener.onNetResponseError("网络异常");
+                    }
+                }
             }
         });
     }

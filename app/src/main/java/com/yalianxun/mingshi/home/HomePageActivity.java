@@ -10,11 +10,13 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.yalianxun.mingshi.BaseActivity;
+import com.yalianxun.mingshi.LoginActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.BannerPagerAdapter;
 import com.yalianxun.mingshi.adapter.CustomRecyclerAdapter;
@@ -27,6 +29,7 @@ import com.yalianxun.mingshi.beans.Notification;
 import com.yalianxun.mingshi.beans.UserInfo;
 import com.yalianxun.mingshi.personal.PersonalActivity;
 import com.yalianxun.mingshi.utils.JsonUtil;
+import com.yalianxun.mingshi.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +113,7 @@ public class HomePageActivity extends BaseActivity {
         String response = SP_MANAGER.getValue("loginResponse","");
         list = JsonUtil.getJsonUtil().getUserInfoList(response);
         for(UserInfo userInfo : list){
-            String location = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum().substring(4);
+            String location = userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum();
             locations.add(location);
         }
         userLocation = findViewById(R.id.user_location);
@@ -165,10 +168,6 @@ public class HomePageActivity extends BaseActivity {
             dataList.add(new ImageInfo(resID));
         }
         dataList.add(new ImageInfo(R.drawable.banner1));
-
-//        for(String label :labels){
-//            labelList.add(new ImageInfo(label,R.drawable.fee_icon));
-//        }
         for(int i = 0;i < labels.length; i++){
             labelList.add(new ImageInfo(labels[i],label_icons[i]));
         }
@@ -196,8 +195,12 @@ public class HomePageActivity extends BaseActivity {
                 break;
 
             case 5:
-                intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+CUSTOMER_SERVICE_PHONE));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if(CUSTOMER_SERVICE_PHONE.equals("")){
+                    ToastUtils.showTextToast(this,"小区暂无客服电话");
+                }else {
+                    intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+CUSTOMER_SERVICE_PHONE));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
                 break;
             default:
                 break;
@@ -210,7 +213,7 @@ public class HomePageActivity extends BaseActivity {
     }
 
     public void goToPersonalCenter(View view) {
-        startActivity(new Intent(this, PersonalActivity.class));
+        startActivityForResult(new Intent(this, PersonalActivity.class),1000);
     }
 
     public void hideOpenDoor(View view) {
@@ -225,11 +228,12 @@ public class HomePageActivity extends BaseActivity {
     }
 
     private void saveData(){
-        SP_MANAGER.putValue("location",userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum().substring(4));
+        SP_MANAGER.putValue("location",userInfo.getProjectName() + userInfo.getBuildingName() + userInfo.getHouseNum());
         SP_MANAGER.putValue("projectName",userInfo.getProjectName());
         SP_MANAGER.putValue("buildingName",userInfo.getBuildingName());
-        SP_MANAGER.putValue("houseNum",userInfo.getHouseNum().substring(4));
+        SP_MANAGER.putValue("houseNum",userInfo.getHouseNum());
         SP_MANAGER.putValue("houseType",userInfo.getHouseType());
+        CUSTOMER_SERVICE_PHONE = userInfo.getServiceTel();
     }
 
     @Override
@@ -240,5 +244,14 @@ public class HomePageActivity extends BaseActivity {
 
     public void changeLocation(View view) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1000 && resultCode == 1010){
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
     }
 }

@@ -6,8 +6,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
 import com.yalianxun.mingshi.adapter.DownloadImageAdapter;
@@ -24,7 +27,7 @@ public class EventDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         TextView tv = findViewById(R.id.av_title);
-        tv.setText(R.string.detail);
+        tv.setText("报事详情");
         Intent intent = getIntent();
         Event event = intent.getParcelableExtra("event");
         if (event != null){
@@ -37,8 +40,9 @@ public class EventDetailActivity extends BaseActivity {
             }else if(event.getStatus() == 2){
                 ((TextView)findViewById(R.id.ed_status)).setText("已完成");
                 findViewById(R.id.feedback_layout).setVisibility(View.VISIBLE);
+                ((TextView)findViewById(R.id.ed_feedback)).setText(event.getFeedback());
             }
-            ((TextView)findViewById(R.id.ed_timestamp)).setText(event.getTimeStamp());
+            ((TextView)findViewById(R.id.ed_timestamp)).setText(event.getStartTime());
             ((TextView)findViewById(R.id.ed_event_type)).setText(event.getCurrentStatus());
             ((TextView)findViewById(R.id.ed_content)).setText(event.getContent());
             if(event.getPictureNum() >0){
@@ -53,6 +57,31 @@ public class EventDetailActivity extends BaseActivity {
                 GridView gv = findViewById(R.id.ed_gv);
                 gv.setAdapter(adapter);
             }
+            String location =SP_MANAGER.getValue("buildingName","") + SP_MANAGER.getValue("houseNum","");;
+            ((TextView)findViewById(R.id.ed_location)).setText(location);
+            ImageView iv1 = findViewById(R.id.ed_pic1);
+            ImageView iv2 = findViewById(R.id.ed_pic2);
+            ImageView iv3 = findViewById(R.id.ed_pic3);
+            if(!event.getImageOne().equals("")){
+                findViewById(R.id.ed_show_picture).setVisibility(View.VISIBLE);
+                loadPicture(iv1,event.getImageOne());
+                loadPicture(iv2,event.getImageTwo());
+                loadPicture(iv3,event.getImageThree());
+            }
+        }
+
+    }
+
+    private void loadPicture(ImageView imageView,String url){
+        if(url.equals("")){
+            imageView.setVisibility(View.INVISIBLE);
+        }else {
+            imageView.setVisibility(View.VISIBLE);
+            Glide.with(this)
+                    .load(url)
+                    .placeholder(R.drawable.placeholder_pic)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imageView);
         }
 
     }

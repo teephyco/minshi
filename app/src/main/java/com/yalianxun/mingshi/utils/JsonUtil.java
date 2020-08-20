@@ -44,7 +44,9 @@ public class JsonUtil {
                 String projectName = jsonObject.optString("projectName", "");
                 String buildingName = jsonObject.optString("buildingName", "");
                 String houseType = jsonObject.optString("houseType", "");
-                UserInfo info = new UserInfo(globalId,userId,name,phone,houseNum,projectId,projectName,buildingName,houseType);
+                String serviceTel = jsonObject.optString("serviceTel", "");
+//                UserInfo info = new UserInfo(globalId,userId,name,phone,houseNum,projectId,projectName,buildingName,houseType);
+                UserInfo info = new UserInfo(globalId,userId,name,phone,houseNum,projectId,projectName,buildingName,houseType,serviceTel);
                 list.add(info);
             }
         }catch (Exception e){
