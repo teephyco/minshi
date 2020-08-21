@@ -364,17 +364,21 @@ public class HttpUtils {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.d("http", "onFailure: " + e.getMessage());
+                listener.onNetResponseError("获取物业档案失败");
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if(response.body() != null){
                     try {
-                        JSONObject jsonObjectALL = new JSONObject(response.body().string());
+                        String responseValue = response.body().string();
+                        JSONObject jsonObjectALL = new JSONObject(responseValue);
                         if(jsonObjectALL.optString("code","").equals("200"))
-                            listener.onNetResponseError("报事成功");
-                        else {
-                            listener.onNetResponseError("报事失败");
+                            listener.onNetResponseSuccess(responseValue);
+                        else if(jsonObjectALL.optString("code","").equals("401")){
+                            listener.onNetResponseError("登录已过期，请重新登录");
+                        }else {
+                            listener.onNetResponseError("获取物业档案失败");
                         }
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();

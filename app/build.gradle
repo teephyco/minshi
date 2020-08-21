@@ -57,6 +57,7 @@ MobSDK {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.github.open-android:PhotoImageView:0.1.0'
     implementation 'org.sufficientlysecure:html-textview:3.9'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.1'
