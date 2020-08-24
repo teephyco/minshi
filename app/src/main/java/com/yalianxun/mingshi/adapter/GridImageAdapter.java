@@ -423,8 +423,8 @@ public class GridImageAdapter extends
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
 
                         .into(viewHolder.mImg);
-                Log.i("xph","path : "+ (PictureMimeType.isContent(path) && !media.isCut() && !media.isCompressed())
-                + " " + Uri.parse(path));
+//                Log.i("xph","path : "+ (PictureMimeType.isContent(path) && !media.isCut() && !media.isCompressed())
+//                + " " + Uri.parse(path));
 
             }
 

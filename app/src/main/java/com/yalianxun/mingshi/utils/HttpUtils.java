@@ -259,52 +259,6 @@ public class HttpUtils {
         });
 
     }
-    public static void getEventReportList(String projectId, String houseNum,String phone,OnNetResponseListener listener){
-        String url = URL + "finger/event/getEventReportList?projectId=" + projectId +"&houseNum=" + houseNum + "&phone=" + phone;
-        OkHttpClient okHttpClient=new OkHttpClient();
-        final Request request=new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-        final Call call = okHttpClient.newCall(request);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Response response = call.execute();
-                    if(response.body() != null){
-                        try {
-                            String str = response.body().string();
-                            JSONObject jsonObjectALL = new JSONObject(str);
-                            JSONObject data = jsonObjectALL.optJSONObject("data");
-                            assert data != null;
-                            JSONArray jsonArray = data.getJSONArray("dataList");
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                // JSON数组里面的具体-JSON对象
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String content = jsonObject.optString("content", "");
-                                long reportTime = jsonObject.optLong("reportTime", 0);
-                                String picUrl = jsonObject.optString("picUrl", "");
-
-                                // 日志打印结果：
-                                String timestamp = DateUtil.getTime(reportTime,1);
-                                Log.d("http", "解析的结果：content" + content + " reportTime: " + timestamp + " picUrl:" + picUrl);
-                            }
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-
-
-                } catch (IOException e) {
-                    Log.d("ok http","Fail reason : "+ e.getMessage());
-                    e.printStackTrace();
-                    listener.onNetResponseError("网络异常");
-                }
-            }
-        }).start();
-    }
 
     public static void getMonthFeeDetail(String projectID,String houseNum,String date,String openId,OnNetResponseListener listener){
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -389,6 +343,50 @@ public class HttpUtils {
         });
     }
 
+    public static void getAllNotification(String projectId,String page,String rows,String openId,OnNetResponseListener listener){
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("projectId", projectId)
+                .add("page", page)
+                .add("rows", rows)
+                .build();
+
+        String url = HttpUtils.URL + "notice/list";
+        Request request = new Request.Builder()
+                .addHeader("openId",openId)
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.d("ok http", "onFailure: " + e.getMessage());
+                listener.onNetResponseError("获取列表失败");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                if(response.body() != null){
+                    try {
+                        String responseValue = response.body().string();
+                        JSONObject jsonObjectALL = new JSONObject(responseValue);
+                        if(jsonObjectALL.optString("code","").equals("200"))
+                            listener.onNetResponseSuccess(responseValue);
+                        else if(jsonObjectALL.optString("code","").equals("401")){
+                            listener.onNetResponseError("登录已过期，请重新登录");
+                        }else {
+                            listener.onNetResponseError("获取列表失败");
+                        }
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                        listener.onNetResponseError("获取列表失败");
+                    }
+                }
+            }
+        });
+    }
     public interface OnNetResponseListener {
 
         void onNetResponseError(String msg);

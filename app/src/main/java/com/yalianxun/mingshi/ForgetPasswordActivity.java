@@ -83,7 +83,7 @@ public class ForgetPasswordActivity extends BaseActivity {
 
                 }
             }else{
-                Log.i("xph"," number is" + data.getClass() + "  " + data );
+//                Log.i("xph"," number is" + data.getClass() + "  " + data );
                 ((Throwable)data).printStackTrace();
                 runOnUiThread(() -> {
                     if(data.toString().contains("校验的验证码为空")){
@@ -186,7 +186,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         time=0;
-        Log.i("xph"," thread run end");
+//        Log.i("xph"," thread run end");
         SMSSDK.unregisterEventHandler(eh);
     }
 

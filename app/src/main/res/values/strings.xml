@@ -104,5 +104,6 @@
     <string name="user_protocol">《联家用户协议》</string>
     <string name="modify_name">修改名称</string>
     <string name="agree_mod">确定要修改吗？</string>
+    <string name="close">关闭</string>
 
 </resources>

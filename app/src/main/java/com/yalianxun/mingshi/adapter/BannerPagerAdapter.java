@@ -65,7 +65,7 @@ public class BannerPagerAdapter extends PagerAdapter {
                     break;
                 case MotionEvent.ACTION_MOVE:
                     isMove = true;
-                    Log.d("xph"," move ");
+//                    Log.d("xph"," move ");
                     break;
                 case MotionEvent.ACTION_UP:
                     if(!isMove){

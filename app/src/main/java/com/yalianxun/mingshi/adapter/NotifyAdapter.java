@@ -72,12 +72,6 @@ public class NotifyAdapter extends BaseAdapter {
         vh.tv4.setText(notification.getContent());
         String str = "" + notification.getCountNum();
         vh.tv3.setText(str);
-
-        if(position != 0){
-            vh.emergency.setVisibility(View.GONE);
-        }else {
-            vh.emergency.setVisibility(View.VISIBLE);
-        }
         return item;
     }
 

@@ -6,8 +6,27 @@ public class Notification {
     private String timestamp;
     private int countNum;
     private String imgUrl;
+
+    public String getContentLink() {
+        return contentLink;
+    }
+
+    public void setContentLink(String contentLink) {
+        this.contentLink = contentLink;
+    }
+
+    private String sourceLink;
+    private String contentLink;
     private int resID;
     private int notificationType;
+
+    public String getSourceLink() {
+        return sourceLink;
+    }
+
+    public void setSourceLink(String sourceLink) {
+        this.sourceLink = sourceLink;
+    }
 
     public Notification(String title, String timestamp, int countNum, int resID, int notificationType) {
         this.title = title;
@@ -38,6 +57,9 @@ public class Notification {
         this.content = content;
         this.timestamp = timestamp;
         this.countNum = countNum;
+    }
+
+    public Notification(){
     }
 
     public Notification(String title,String content,String timestamp,int countNum,String imgUrl){

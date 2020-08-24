@@ -27,18 +27,40 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:layout_gravity="center_vertical"
             android:layout_height="match_parent"/>
         <View
             android:layout_width="42dp"
             android:layout_height="match_parent"/>
     </LinearLayout>
-    <LinearLayout
+    <RelativeLayout
         android:layout_margin="10dp"
         android:background="@color/picture_color_white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-    </LinearLayout>
+        <WebView
+            android:id="@+id/web"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/label_title"
+            android:textColor="@color/black_color"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <org.sufficientlysecure.htmltextview.HtmlTextView
+            android:visibility="gone"
+            android:layout_marginTop="6dp"
+            android:id="@+id/html_text"
+            android:textColor="@color/black_color"
+            android:layout_below="@id/label_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.Small" />
+    </RelativeLayout>
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -76,6 +77,15 @@ public class HomePageActivity extends BaseActivity {
         DoorAdapter adapter = new DoorAdapter(listViewData,this);
         ListView listView = findViewById(R.id.shortcut_open_lv);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Door selectedDoor = listViewData.get(position);
+            if (selectedDoor.getStatus() == 0){
+                ToastUtils.showTextToast(HomePageActivity.this,"设备离线");
+            }else {
+                openDoorStatus();
+//                ToastUtils.showTextToast(HomePageActivity.this,"开门成功");
+            }
+        });
 
         //banner
         initData();
@@ -134,14 +144,21 @@ public class HomePageActivity extends BaseActivity {
 
         ArrayList<Notification> messages = new ArrayList<>();
 //        String title, String timestamp, int countNum, int resID, int notificationType
-        messages.add(new Notification("蜂蜜的功效","",200,R.drawable.honey,1));
-        messages.add(new Notification("茶道的艺术","",300,R.drawable.tea,1));
+        Notification notification = new Notification("蜂蜜的功效","",200,R.drawable.honey,1);
+        notification.setSourceLink("https://baijiahao.baidu.com/s?id=1612532540849539614&wfr=spider&for=pc");
+        messages.add(notification);
+        notification = new Notification("茶道的艺术","",300,R.drawable.tea,1);
+        notification.setSourceLink("https://baijiahao.baidu.com/s?id=1595700515789334333&wfr=spider&for=pc");
+        messages.add(notification);
         RecyclerView info_recycler = findViewById(R.id.life_info_recycler);
         LifeInfoRecyclerAdapter lifeInfoRecyclerAdapter = new LifeInfoRecyclerAdapter(messages,this);
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(HomePageActivity.this);
         linearLayoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
         lifeInfoRecyclerAdapter.setOnItemClickListener((v, position) -> {
-
+            Intent intent = new Intent(this,DetailActivity.class);
+            intent.putExtra("key","life");
+            intent.putExtra("url",messages.get(position).getSourceLink());
+            startActivity(intent);
         });
 
         info_recycler.setLayoutManager(linearLayoutManager1);
@@ -151,14 +168,22 @@ public class HomePageActivity extends BaseActivity {
 
         ListView develop_lv = findViewById(R.id.home_lv);
         List<Notification> developList = new ArrayList<>();
-        Notification notify = new Notification("小区绿化环境进行进一步整改","小区园林绿化的建设规范指标 住宅园林设计上强调以“绿”为主,园林绿化生态效益的发挥,主要由树木、花草的种植来实现,因此,以“绿”为…","刚刚",121,"https://pics6.baidu.com/feed/5243fbf2b2119313350a7141b34343d190238d7c.jpeg?token=3f2a65790e7583d7757328455ff05171&s=A4AA47B04A5057DE0EA9ECB603001010");
+        Notification notify = new Notification("小区绿化环境进行进一步整改","小区园林绿化的建设规范指标 住宅园林设计上强调以“绿”为主,园林绿化生态效益的发挥,主要由树木、花草的种植来实现,因此,以“绿”为本。为进一步改善小区生活环境，","刚刚",121,"https://pics6.baidu.com/feed/5243fbf2b2119313350a7141b34343d190238d7c.jpeg?token=3f2a65790e7583d7757328455ff05171&s=A4AA47B04A5057DE0EA9ECB603001010");
         notify.setResID(R.drawable.property_home);
+        notify.setSourceLink("file:///android_asset/property_dev1.html");
         developList.add(notify);
-        notify = new Notification("公司党支部成立","为全面贯彻落实习近平新时代中国特色社会主义思想和党的十九大精神，住宅物业旗下子公司深圳市长广深物业管理有限公司党支部正式成立！2019年2月27日下午，在公司党支部举行了支部成立大会暨揭牌仪式。街道党建服务中心主任武俊华同志、南岭村社区党委书记张育彪同志、南岭产业园党委书记李斌同志、集团董事长陈芝明先生及公司全体党员和高层管理人员参加了会议。","07月23日",77,"");
+        notify = new Notification("组织党员学习全面从严治党","6月1日下午，物业管理中心党支部在中心319培训室，组织全体党员进行了集中学习，学习活动由党支部书记主持。学习内容为 2017年10月第1版《中国共产党章程》和学校召开全面从严治党","07月23日",77,"");
         notify.setResID(R.drawable.property_home_other);
+        notify.setSourceLink("file:///android_asset/property_dev2.html");
         developList.add(notify);
         DevelopAdapter developAdapter = new DevelopAdapter(developList,this);
         develop_lv.setAdapter(developAdapter);
+        develop_lv.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(this,DetailActivity.class);
+            intent.putExtra("key","life");
+            intent.putExtra("url",developList.get(position).getSourceLink());
+            startActivity(intent);
+        });
 
     }
 
@@ -253,5 +278,16 @@ public class HomePageActivity extends BaseActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
+    }
+
+    public void hideOpenDoorStatus(View view) {
+        findViewById(R.id.open_door_status).setVisibility(View.GONE);
+    }
+
+    private void openDoorStatus(){
+        findViewById(R.id.open_door_view).setVisibility(View.GONE);
+        TextView textView = findViewById(R.id.close_status);
+        textView.setText("开门成功！");
+        findViewById(R.id.open_door_status).setVisibility(View.VISIBLE);
     }
 }
