@@ -63,7 +63,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/bolder"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="400dp">
@@ -126,15 +125,19 @@
         android:background="#000000"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </View>
     <ListView
-        android:background="@drawable/bolder"
         android:visibility="gone"
+        android:background="@drawable/white_bolder"
         android:scrollbars="none"
         android:id="@+id/tr_dialog_lv"
+        android:divider="@color/background_color"
         android:layout_marginTop="166dp"
-        android:layout_width="200dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="6dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="60dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"/>
     <LinearLayout
         android:id="@+id/tr_my_selector"

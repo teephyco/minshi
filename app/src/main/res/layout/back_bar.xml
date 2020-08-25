@@ -11,16 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         tools:ignore="UselessParent">
-        <ImageButton
-            android:layout_width="25dp"
+        <ImageView
+            android:layout_width="20dp"
             android:layout_marginStart="17dp"
             android:layout_marginTop="15dp"
             android:background="@color/themeColor"
             android:onClick="goBack"
-            android:src="@drawable/common_back_btn_white"
+            android:src="@drawable/ic_back_arrow_white"
             android:layout_height="20dp"
-            android:contentDescription="@android:string/search_go"
-            tools:ignore="OnClick" />
+            android:contentDescription="@string/my_picture" />
         <TextView
             android:id="@+id/av_title"
             android:paddingTop="15dp"

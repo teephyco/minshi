@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import com.yalianxun.mingshi.BaseActivity;
 import com.yalianxun.mingshi.R;
+import com.yalianxun.mingshi.adapter.LocationChooseAdapter;
 import com.yalianxun.mingshi.adapter.TraceAdapter;
+import com.yalianxun.mingshi.beans.Door;
 import com.yalianxun.mingshi.beans.TripRecord;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class TripRecordActivity extends BaseActivity {
     private int startMinute;
     private int endHour;
     private int endMinute;
+    private int selected_position = 0;
     final String[] DOORS = new String[]{"10栋2单元大门", "10栋4单元大门",
             "南雅豪庭东门", "南雅豪庭北门",
             "6栋2单元大门", "2栋5单元大门"};//数据来源后台
@@ -138,11 +141,20 @@ public class TripRecordActivity extends BaseActivity {
         findViewById(R.id.tr_dialog).setVisibility(View.VISIBLE);
         findViewById(R.id.tr_dialog_lv).setVisibility(View.VISIBLE);
 
+        ArrayList<Door> list = new ArrayList<>();
+        for(int i = 0; i < DOORS.length; i++){
+            Door door = new Door("",DOORS[i],1);
+            if(i == selected_position)
+                door.setStatus(0);
+            list.add(door);
+        }
         ListView lv = findViewById(R.id.tr_dialog_lv);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, DOORS);
-        lv.setAdapter(adapter);
+        LocationChooseAdapter locationChooseAdapter = new LocationChooseAdapter(list,this);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, DOORS);
+        lv.setAdapter(locationChooseAdapter);
         lv.setOnItemClickListener((parent, v, position, id) -> {
             ((TextView)findViewById(R.id.tr_my_door)).setText(DOORS[position]);
+            selected_position = position;
             hideAlert(v);
         });
     }

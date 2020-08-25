@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/picture_color_white"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@string/my_picture"
+        android:src="@drawable/ic_location"
+        android:layout_width="20dp"
+        android:layout_height="20dp"/>
+    <TextView
+        android:id="@+id/location_name"
+        android:textColor="@color/black_color"
+        android:layout_marginStart="10dp"
+        android:text="@string/input_tips"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/selected_status"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@string/my_picture"
+        android:src="@drawable/ic_cercles_un"
+        android:layout_width="20dp"
+        android:layout_height="20dp"/>
+</LinearLayout>
